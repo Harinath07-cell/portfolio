@@ -144,7 +144,6 @@ export function LeetCodeSection() {
         <SectionHeading
           eyebrow="Problem Solving"
           title="LeetCode dashboard"
-          description="A performance dashboard for algorithm practice, ranking, and progress over time."
         />
 
         <motion.div

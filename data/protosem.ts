@@ -21,12 +21,45 @@ export const protosemInfo = {
 export const protosemWeeks: ProtosemWeek[] = [
   {
     week: 0,
-    title: "Beginning the Innovation Journey",
+    title: "Week 0 Report – ProtoSem Orientation & Team Building",
     image: "/images/protosem/week-00-simple.svg",
+    fileLogImage: "/images/protosem/week-00-log-1.jpg",
+    fileLogImages: [
+      "/images/protosem/week-00-log-1.jpg",
+      "/images/protosem/week-00-log-2.jpg"
+    ],
     description:
-      "The first week at ProtoSem focused on collaboration, self-discovery, and workplace fundamentals through interactive challenges and hands-on learning, laying the foundation for the journey ahead.",
-    technologies: ["5S Methodology", "16 Personalities Assessment", "Team Building"],
-    skillsLearned: ["Teamwork", "Communication", "Critical Thinking", "Problem Solving", "Creativity", "Time Management"],
+      "Week 0 marked the beginning of my ProtoSem journey. The orientation sessions introduced me to the overall structure of ProtoSem and FORGE, their objectives, learning approach, and the different cohorts available. I gained a clear understanding of how ProtoSem focuses on experiential learning, innovation, collaboration, and personal development throughout the semester.",
+    overview:
+      "Week 0 marked the beginning of my ProtoSem journey. The orientation sessions introduced me to the overall structure of ProtoSem and FORGE, their objectives, learning approach, and the different cohorts available. I gained a clear understanding of how ProtoSem focuses on experiential learning, innovation, collaboration, and personal development throughout the semester.\n\nOne of the first activities was an Open Talk session, where each participant selected a comic from the ZincBook application and shared their thoughts with the group. I chose a comic based on travel and adventure because it reflected my interest in exploring new places, taking on challenges, and learning through experiences. This activity helped me improve my confidence while expressing my thoughts in front of others.\n\nAnother engaging activity was the Marshmallow Challenge. We were divided into different beta teams, and each team was provided with spaghetti sticks, thread, tape, and a marshmallow. Our objective was to construct the tallest free-standing structure that could support the marshmallow at its highest point. This activity emphasized teamwork, planning, communication, creativity, and iterative problem-solving. Working together under a time limit taught me the importance of collaboration and adapting ideas quickly.\n\nDuring the week, I also completed the 16 Personalities Assessment, where my personality type was identified as Protagonist (ENFJ). The assessment helped me better understand my strengths in leadership, communication, and motivating others while also highlighting areas for personal growth.\n\nOverall, Week 0 provided a strong foundation for my ProtoSem journey. It helped me understand the program's vision, interact with new teammates, improve my communication skills, and build confidence through various collaborative activities.",
+    objectives: [
+      "Understand the vision and structure of FORGE and ProtoSem.",
+      "Learn about the different ProtoSem cohorts and their objectives.",
+      "Build confidence through interactive activities.",
+      "Improve teamwork and collaboration.",
+      "Develop communication and presentation skills.",
+      "Understand my personality traits through the 16 Personalities Assessment.",
+    ],
+    activitiesConducted: [
+      "Orientation on FORGE and ProtoSem.",
+      "Introduction to ProtoSem cohorts and their learning pathways.",
+      "Open Talk session using a ZincBook comic.",
+      "Marshmallow Challenge.",
+      "16 Personalities Assessment.",
+    ],
+    technologies: ["5S Methodology", "16 Personalities Assessment", "Team Building", "ZincBook"],
+    skillsLearned: [
+      "Teamwork",
+      "Communication",
+      "Leadership",
+      "Creativity",
+      "Critical Thinking",
+      "Problem Solving",
+      "Collaboration",
+      "Public Speaking",
+      "Self-awareness",
+      "Time Management",
+    ],
     challenges:
       "Designing a stable Marshmallow Tower within strict time constraints while coordinating ideas with a newly formed team.",
     gallery: ["/images/protosem/week-01-a.jpg", "/images/protosem/week-01-b.jpg"],
@@ -34,12 +67,41 @@ export const protosemWeeks: ProtosemWeek[] = [
   },
   {
     week: 1,
-    title: "Onboarding & Innovation Sprint Kickoff",
+    title: "Week 1 Report – ProtoSem Orientation & Team Building",
     image: "/images/protosem/week-01.jpg",
+    fileLogImage: "/images/protosem/week-01.jpg",
     description:
-      "Joined the Protosem innovation floor, got introduced to the product pods, and mapped out the rapid-prototyping workflow used across active projects.",
-    technologies: ["Figma", "Notion", "Design Thinking Canvas"],
-    skillsLearned: ["Design thinking fundamentals", "Cross-functional collaboration"],
+      "Week 1 marked the continuation of my ProtoSem journey. The orientation sessions introduced me to the overall structure of ProtoSem and FORGE, their objectives, learning approach, and the different cohorts available. I gained a clear understanding of how ProtoSem focuses on experiential learning, innovation, collaboration, and personal development throughout the semester.",
+    overview:
+      "Week 0 marked the beginning of my ProtoSem journey. The orientation sessions introduced me to the overall structure of ProtoSem and FORGE, their objectives, learning approach, and the different cohorts available. I gained a clear understanding of how ProtoSem focuses on experiential learning, innovation, collaboration, and personal development throughout the semester.\n\nOne of the first activities was an Open Talk session, where each participant selected a comic from the ZincBook application and shared their thoughts with the group. I chose a comic based on travel and adventure because it reflected my interest in exploring new places, taking on challenges, and learning through experiences. This activity helped me improve my confidence while expressing my thoughts in front of others.\n\nAnother engaging activity was the Marshmallow Challenge. We were divided into different beta teams, and each team was provided with spaghetti sticks, thread, tape, and a marshmallow. Our objective was to construct the tallest free-standing structure that could support the marshmallow at its highest point. This activity emphasized teamwork, planning, communication, creativity, and iterative problem-solving. Working together under a time limit taught me the importance of collaboration and adapting ideas quickly.\n\nDuring the week, I also completed the 16 Personalities Assessment, where my personality type was identified as Protagonist (ENFJ). The assessment helped me better understand my strengths in leadership, communication, and motivating others while also highlighting areas for personal growth.\n\nOverall, Week 0 provided a strong foundation for my ProtoSem journey. It helped me understand the program's vision, interact with new teammates, improve my communication skills, and build confidence through various collaborative activities.",
+    objectives: [
+      "Understand the vision and structure of FORGE and ProtoSem.",
+      "Learn about the different ProtoSem cohorts and their objectives.",
+      "Build confidence through interactive activities.",
+      "Improve teamwork and collaboration.",
+      "Develop communication and presentation skills.",
+      "Understand my personality traits through the 16 Personalities Assessment.",
+    ],
+    activitiesConducted: [
+      "Orientation on FORGE and ProtoSem.",
+      "Introduction to ProtoSem cohorts and their learning pathways.",
+      "Open Talk session using a ZincBook comic.",
+      "Marshmallow Challenge.",
+      "16 Personalities Assessment.",
+    ],
+    technologies: ["5S Methodology", "16 Personalities Assessment", "Team Building", "ZincBook"],
+    skillsLearned: [
+      "Teamwork",
+      "Communication",
+      "Leadership",
+      "Creativity",
+      "Critical Thinking",
+      "Problem Solving",
+      "Collaboration",
+      "Public Speaking",
+      "Self-awareness",
+      "Time Management",
+    ],
     challenges:
       "Adjusting to an ambiguity-first workflow where problems are explored before solutions are proposed.",
     gallery: ["/images/protosem/week-01-a.jpg", "/images/protosem/week-01-b.jpg"],

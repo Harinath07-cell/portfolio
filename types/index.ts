@@ -46,9 +46,14 @@ export interface ProtosemWeek {
   title: string;
   image: string;
   description: string;
+  overview?: string;
+  objectives?: string[];
+  activitiesConducted?: string[];
   technologies: string[];
   skillsLearned: string[];
   challenges: string;
   gallery: string[];
   githubUrl?: string;
+  fileLogImage?: string;
+  fileLogImages?: string[];
 }
