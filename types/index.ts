@@ -54,6 +54,8 @@ export interface ProtosemWeek {
   challenges: string;
   gallery: string[];
   githubUrl?: string;
+  assignmentPoints?: string[];
+  reportImages?: string[];
   fileLogImage?: string;
   fileLogImages?: string[];
 }

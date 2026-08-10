@@ -5,7 +5,7 @@ import { protosemInfo, protosemWeeks } from "@/data/protosem";
 import { fadeUp, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Building2, ChevronLeft, ChevronRight, FileText, Github, Search, X } from "lucide-react";
+import { Building2, ClipboardList, ChevronLeft, ChevronRight, Github, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export function Protosem() {
@@ -15,8 +15,7 @@ export function Protosem() {
   );
   const [query, setQuery] = useState("");
   const [activeWeek, setActiveWeek] = useState<number>(sortedWeeks[0]?.week ?? 0);
-  const [isLogModalOpen, setIsLogModalOpen] = useState(false);
-  const [activeLogImageIndex, setActiveLogImageIndex] = useState(0);
+  const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
 
   const current = sortedWeeks.find((w) => w.week === activeWeek) ?? sortedWeeks[0];
   const currentIndex = sortedWeeks.findIndex((w) => w.week === activeWeek);
@@ -24,13 +23,7 @@ export function Protosem() {
     (sortedWeeks.length / protosemInfo.totalWeeks) * 100
   );
 
-  const logImages = useMemo(() => {
-    if (!current) return [];
-    if (current.fileLogImages && current.fileLogImages.length > 0) return current.fileLogImages;
-    if (current.fileLogImage) return [current.fileLogImage];
-    if (current.image) return [current.image];
-    return [];
-  }, [current]);
+  const reportImage = current?.fileLogImages?.[0] ?? current?.fileLogImage;
 
   const filteredWeeks = useMemo(() => {
     if (!query.trim()) return sortedWeeks;
@@ -145,13 +138,36 @@ export function Protosem() {
                 <h3 className="text-xl font-semibold text-ink">{current.title}</h3>
                 
                 {current.overview ? (
-                  <div className="mt-4 space-y-3">
+                  <div className="mt-4">
                     <p className="eyebrow">Report Overview</p>
-                    {current.overview.split("\n\n").map((para, idx) => (
-                      <p key={idx} className="text-sm leading-relaxed text-ink-muted">
-                        {para}
-                      </p>
-                    ))}
+                    <div className="mt-3 grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(220px,0.7fr)]">
+                      <div className="space-y-3">
+                        {current.overview.split("\n\n").map((para, idx) => (
+                          <p key={idx} className="text-sm leading-relaxed text-ink-muted">
+                            {para}
+                          </p>
+                        ))}
+                      </div>
+                      {reportImage && (
+                        <img
+                          src={reportImage}
+                          alt={`Week ${current.week} report`}
+                          className="w-full rounded-xl border border-hairline bg-canvas/40 object-cover"
+                        />
+                      )}
+                    </div>
+                    {current.reportImages && current.reportImages.length > 0 && (
+                      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {current.reportImages.map((image, index) => (
+                          <img
+                            key={image}
+                            src={image}
+                            alt={`Week ${current.week} activity ${index + 1}`}
+                            className="aspect-[4/3] w-full rounded-xl border border-hairline bg-canvas/40 object-cover"
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p className="mt-3 text-sm leading-relaxed text-ink-muted">
@@ -237,16 +253,13 @@ export function Protosem() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
-                    {logImages.length > 0 && (
+                    {current.assignmentPoints && current.assignmentPoints.length > 0 && (
                       <button
                         type="button"
-                        onClick={() => {
-                          setActiveLogImageIndex(0);
-                          setIsLogModalOpen(true);
-                        }}
+                        onClick={() => setIsAssignmentModalOpen(true)}
                         className="flex items-center gap-1.5 rounded-full border border-hairline px-4 py-2 text-xs text-ink-muted transition-colors hover:border-indigo-soft hover:text-ink"
                       >
-                        <FileText size={14} /> File Log {logImages.length > 1 ? `(${logImages.length})` : ""}
+                        <ClipboardList size={14} /> Assignment
                       </button>
                     )}
                     {current.githubUrl && (
@@ -267,15 +280,14 @@ export function Protosem() {
         </AnimatePresence>
       </div>
 
-      {/* File Log Image Modal */}
       <AnimatePresence>
-        {isLogModalOpen && logImages.length > 0 && (
+        {isAssignmentModalOpen && current.assignmentPoints && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] flex items-center justify-center bg-canvas/85 px-4 py-6 backdrop-blur-xl"
-            onClick={() => setIsLogModalOpen(false)}
+            onClick={() => setIsAssignmentModalOpen(false)}
           >
             <motion.div
               initial={{ y: 24, opacity: 0, scale: 0.98 }}
@@ -283,78 +295,31 @@ export function Protosem() {
               exit={{ y: 16, opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.25 }}
               onClick={(event) => event.stopPropagation()}
-              className="relative max-h-[85vh] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-hairline bg-surface-2 p-6 shadow-glow"
+              className="relative w-full max-w-xl rounded-[2rem] border border-hairline bg-surface-2 p-6 shadow-glow sm:p-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-semibold text-ink">
-                  Week {current.week} Log File {logImages.length > 1 ? `(${activeLogImageIndex + 1} of ${logImages.length})` : ""}
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => setIsLogModalOpen(false)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas/70 text-ink-muted transition-colors hover:text-ink"
-                  aria-label="Close log image"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <div className="relative flex items-center justify-center overflow-hidden max-h-[68vh] min-h-[280px]">
-                {logImages.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveLogImageIndex((prev) => (prev > 0 ? prev - 1 : logImages.length - 1));
-                    }}
-                    className="absolute left-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-hairline bg-canvas/80 text-ink backdrop-blur-md transition-transform hover:scale-110"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                )}
-
-                <img
-                  src={logImages[activeLogImageIndex]}
-                  alt={`Week ${current.week} Log ${activeLogImageIndex + 1}`}
-                  className="max-h-[63vh] w-auto rounded-xl object-contain bg-canvas/40 p-2 shadow-md"
-                />
-
-                {logImages.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveLogImageIndex((prev) => (prev < logImages.length - 1 ? prev + 1 : 0));
-                    }}
-                    className="absolute right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-hairline bg-canvas/80 text-ink backdrop-blur-md transition-transform hover:scale-110"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                )}
-              </div>
-
-              {logImages.length > 1 && (
-                <div className="mt-4 flex justify-center gap-2">
-                  {logImages.map((img, idx) => (
-                    <button
-                      key={img}
-                      onClick={() => setActiveLogImageIndex(idx)}
-                      className={cn(
-                        "h-2.5 rounded-full transition-all",
-                        idx === activeLogImageIndex ? "w-8 bg-cyan" : "w-2.5 bg-white/20 hover:bg-white/40"
-                      )}
-                      aria-label={`Go to slide ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
+              <button
+                type="button"
+                onClick={() => setIsAssignmentModalOpen(false)}
+                className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas/70 text-ink-muted transition-colors hover:text-ink"
+                aria-label="Close assignment"
+              >
+                <X size={18} />
+              </button>
+              <p className="eyebrow">Week {String(current.week).padStart(2, "0")} Assignment</p>
+              <h4 className="mt-3 pr-10 text-xl font-semibold text-ink">Assignment focus</h4>
+              <ul className="mt-5 space-y-3 text-sm leading-relaxed text-ink-muted">
+                {current.assignmentPoints.map((point) => (
+                  <li key={point} className="flex gap-3">
+                    <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-cyan" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
     </section>
   );
 }
-

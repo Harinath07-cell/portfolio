@@ -10,7 +10,7 @@ export const projects: Project[] = [
     title: "Career Recommendation System",
     description:
       "An intelligent career guidance platform that helps students discover personalized career paths based on their interests, strengths, and aspirations.",
-    image: "/images/projects/project-placeholder.svg",
+    image: "/images/projects/career-recommendation.svg",
     stack: ["Python", "React", "SQL", "AI Recommendation"],
     type: "AI Platform",
     githubUrl: "https://github.com/Harinath07-cell/career-recommendation",
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     title: "Smart Adaptive Lighting System (SALS)",
     description:
       "An AI and IoT-based adaptive lighting system designed to assist students with Autism Spectrum Disorder by dynamically adjusting environmental lighting according to sensory requirements.",
-    image: "/images/projects/project-placeholder.svg",
+    image: "/images/projects/smart-adaptive-lighting.svg",
     stack: ["IoT", "Python", "Sensors", "AI"],
     type: "IoT",
     githubUrl: "https://github.com/Harinath07-cell/sals",
@@ -79,7 +79,7 @@ export const projects: Project[] = [
     title: "Capacitor Quality Analyser",
     description:
       "An intelligent inspection system capable of identifying physical damage in electrolytic capacitors using image processing and AI-assisted defect detection techniques.",
-    image: "/images/projects/project-placeholder.svg",
+    image: "/images/projects/capacitor-quality-analyser.svg",
     stack: ["Python", "OpenCV", "Image Processing", "AI"],
     type: "Computer Vision",
     githubUrl: "https://github.com/Harinath07-cell/capacitor-quality-analyser",

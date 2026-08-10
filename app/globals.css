@@ -1,13 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
 @import "@fontsource/space-mono/400.css";
 @import "@fontsource/space-mono/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
   font-family: "Valorant";
@@ -44,9 +44,13 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
+  background-color: #06070B;
+  color: #F5F6FA;
 }
 
 body {
+  background-color: #06070B;
+  color: #F5F6FA;
   @apply bg-canvas text-ink antialiased;
   font-feature-settings: "ss01" 1, "cv01" 1;
 }

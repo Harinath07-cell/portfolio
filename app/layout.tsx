@@ -43,8 +43,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="relative overflow-x-hidden">
+    <html lang="en" className="dark bg-canvas text-ink">
+      <body className="relative min-h-screen overflow-x-hidden bg-canvas text-ink">
         <LoadingScreen />
         <SmoothScroll>
           <div aria-hidden className="noise-overlay" />
