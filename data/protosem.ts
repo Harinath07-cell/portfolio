@@ -187,15 +187,75 @@ export const protosemWeeks: ProtosemWeek[] = [
   },
   {
     week: 3,
-    title: "User Research Deep-Dive",
-    image: "/images/protosem/week-03.jpg",
+    title: "Week 3 Report – Electronics Fundamentals & 3D Product Design",
+    image: "/images/protosem/week-03-fusion-mechanical.png",
+    fileLogImage: "/images/protosem/week-03-fusion-mechanical.png",
+    fileLogImages: [
+      "/images/protosem/week-03-fusion-mechanical.png",
+      "/images/protosem/week-03-fusion-rocket.png"
+    ],
     description:
-      "Conducted structured interviews with end users, synthesised findings into an affinity map, and translated insights into three actionable feature bets.",
-    technologies: ["Miro", "Google Forms", "Notion"],
-    skillsLearned: ["User interviewing", "Insight synthesis"],
+      "Mastered electronics fundamentals (Ohm's Law, components) and 3D product design in Autodesk Fusion 360, building 2D sketches, mechanical parts, and 3D models (Microphone, Paper Rocket, Water Bottle).",
+    overview:
+      "Week 3 focused on electronics fundamentals, product design, and 3D modelling using Autodesk Fusion 360. The week connected basic electrical concepts with physical product design.\n\nThe electronics sessions covered voltage, current, resistance, Ohm's Law (V = I × R), and key components like resistors, capacitors, and diodes. In Autodesk Fusion 360, I gained hands-on CAD experience following the workflow: Idea → 2D Sketch → Dimensions & Constraints → 3D Features → Final Model.\n\nI created a detailed mechanical component featuring a base plate, mounting holes, vertical sections, and cylindrical supports. I also modeled 3D real-world products including a Microphone, a Paper Rocket with fins, and a Water Bottle, focusing on symmetry, proportions, and design accuracy.",
+    objectives: [
+      "Understand basic electronics: voltage, current, resistance, circuits, and Ohm's Law (V = I × R).",
+      "Study fundamental electronic components: resistors, capacitors, and diodes.",
+      "Master Autodesk Fusion 360 product design workflow: Idea → 2D Sketch → Dimensions & Constraints → 3D Features → Final Model.",
+      "Practice 2D parametric sketching with accurate dimensions and geometric constraints.",
+      "Develop a detailed mechanical component with mounting holes, base plate, and structural supports.",
+      "Model real-world 3D products: Microphone, Paper Rocket with fins, and Water Bottle.",
+    ],
+    activitiesConducted: [
+      "Studied electronics fundamentals, circuit behavior, and Ohm's Law calculations.",
+      "Analyzed passive & active components: resistors (current control), capacitors (energy storage), and diodes (one-way conduction).",
+      "Practiced 2D parametric sketching, applying geometric constraints and exact dimensions in Fusion 360.",
+      "Modeled complex mechanical component featuring mounting holes, vertical sections, and cylindrical supports.",
+      "Designed 3D Microphone model combining cylindrical bodies, circular details, and top mesh structure.",
+      "Designed 3D Paper Rocket model with main aerodynamic body and stabilizing fins.",
+      "Designed 3D Water Bottle model exploring cylindrical surfaces, proportions, and product form.",
+    ],
+    technologies: [
+      "Autodesk Fusion 360",
+      "CAD & 3D Modelling",
+      "2D Parametric Sketching",
+      "Electronics Fundamentals",
+      "Ohm's Law (V=IR)",
+      "Mechanical Design",
+      "Product Design"
+    ],
+    skillsLearned: [
+      "Basic Electronics",
+      "Circuit Fundamentals",
+      "Problem Solving",
+      "CAD Modelling",
+      "2D Sketching",
+      "3D Modelling",
+      "Geometric Constraints",
+      "Dimensioning",
+      "Product Design",
+      "Spatial Thinking",
+      "Attention to Detail",
+      "Design Iteration",
+    ],
     challenges:
-      "Separating what users say they want from the underlying problem they're actually describing.",
-    gallery: ["/images/protosem/week-03-a.jpg", "/images/protosem/week-03-b.jpg"],
+      "Applying accurate dimensions and geometric constraints during 2D sketching, converting reference concepts into precise 3D mechanical models, maintaining proper proportions for real-world products, and understanding the practical relationship between electrical components.",
+    reportImages: [
+      "/images/protosem/week-03-fusion-rocket.png",
+      "/images/protosem/week-03-fusion-bottle.png"
+    ],
+    gallery: [
+      "/images/protosem/week-03-fusion-mechanical.png",
+      "/images/protosem/week-03-fusion-rocket.png",
+      "/images/protosem/week-03-fusion-bottle.png"
+    ],
+    githubUrl: "https://github.com/Harinath07-cell/fushion-models",
+    assignmentPoints: [
+      "Electronics & Circuit Analysis: Evaluated voltage, current, resistance, and Ohm's Law (V = I × R) along with resistor, capacitor, and diode functions.",
+      "2D Parametric Sketching: Designed fully constrained 2D sketches using precise dimensions and geometric constraints in Autodesk Fusion 360.",
+      "Mechanical Component 3D Design: Built a structural mechanical part featuring a base plate, mounting holes, vertical sections, and cylindrical supports.",
+      "3D Product Modelling (Microphone, Rocket & Bottle): Modeled 3D Microphone (cylindrical details), Paper Rocket (aerodynamic fins), and Water Bottle (proportional curved surfaces).",
+    ],
   },
   // Weeks 4–24: add new entries here as the internship progresses.
 ];
