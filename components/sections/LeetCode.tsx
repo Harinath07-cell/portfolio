@@ -200,40 +200,12 @@ export function LeetCodeSection() {
                   ))}
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-                  <div className="rounded-3xl border border-hairline bg-surface-2 p-5">
-                    <div className="mb-4 flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-sm font-semibold text-ink">Skill distribution</p>
-                        <p className="mt-1 text-xs text-ink-faint">Based on solved problems by difficulty</p>
-                      </div>
-                      <Sparkles size={18} className="text-cyan" />
-                    </div>
-                    <div className="space-y-4">
-                      {distribution.map((item) => {
-                        const value = Number(item.value) || 0;
-                        return (
-                          <div key={item.label} className="space-y-2">
-                            <div className="flex items-center justify-between text-xs text-ink-faint">
-                              <span>{item.label}</span>
-                              <span>{Math.round(value)}%</span>
-                            </div>
-                            <div className="h-2 rounded-full bg-white/5">
-                              <div className="h-full rounded-full bg-gradient-to-r from-indigo to-cyan" style={{ width: `${value}%` }} />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="rounded-3xl border border-hairline bg-surface-2 p-5">
-                    <p className="text-sm font-semibold text-ink">Heatmap</p>
-                    <p className="mt-2 text-xs text-ink-faint">Recent daily activity</p>
-                    <div className="mt-4 overflow-x-auto rounded-3xl border border-white/5 bg-canvas/40 p-4">
-                      <div className="min-w-[420px]">
-                        <Heatmap calendar={data?.submissionCalendar} />
-                      </div>
+                <motion.div variants={fadeUp} className="rounded-3xl border border-hairline bg-surface-2 p-5">
+                  <p className="text-sm font-semibold text-ink">Heatmap</p>
+                  <p className="mt-2 text-xs text-ink-faint">Recent daily activity</p>
+                  <div className="mt-4 overflow-x-auto rounded-3xl border border-white/5 bg-canvas/40 p-4">
+                    <div className="min-w-[420px]">
+                      <Heatmap calendar={data?.submissionCalendar} />
                     </div>
                   </div>
                 </motion.div>

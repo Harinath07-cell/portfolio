@@ -27,11 +27,31 @@ export function Protosem() {
 
   const filteredWeeks = useMemo(() => {
     if (!query.trim()) return sortedWeeks;
-    const q = query.toLowerCase();
-    return sortedWeeks.filter(
-      (w) =>
-        w.title.toLowerCase().includes(q) || `week ${w.week}`.includes(q)
-    );
+    const q = query.toLowerCase().trim();
+    const cleanQ = q.replace(/^wee\b/, "week").replace(/\b0+(\d+)\b/g, "$1");
+    const numMatch = q.match(/\d+/)?.[0];
+    const parsedNum = numMatch ? parseInt(numMatch, 10) : null;
+
+    return sortedWeeks.filter((w) => {
+      const paddedWeek = String(w.week).padStart(2, "0");
+      const weekStr1 = `week ${w.week}`;
+      const weekStr2 = `week ${paddedWeek}`;
+      const titleLower = w.title.toLowerCase();
+      const techLower = w.technologies.join(" ").toLowerCase();
+      const descLower = (w.overview || w.description || "").toLowerCase();
+
+      return (
+        titleLower.includes(q) ||
+        titleLower.includes(cleanQ) ||
+        weekStr1.includes(q) ||
+        weekStr1.includes(cleanQ) ||
+        weekStr2.includes(q) ||
+        weekStr2.includes(cleanQ) ||
+        techLower.includes(q) ||
+        descLower.includes(q) ||
+        (parsedNum !== null && w.week === parsedNum)
+      );
+    });
   }, [sortedWeeks, query]);
 
   function goTo(offset: number) {
@@ -156,16 +176,48 @@ export function Protosem() {
                         />
                       )}
                     </div>
+                    {current.reportVideo && (
+                      <div className="mt-5 overflow-hidden rounded-xl border border-hairline bg-canvas/40">
+                        <p className="px-4 pt-3 text-xs font-mono uppercase tracking-widest text-ink-faint">
+                          Activity Video Demonstration
+                        </p>
+                        <video
+                          src={current.reportVideo}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          controls
+                          className="mt-2 w-full max-h-[420px] rounded-b-xl object-contain bg-black"
+                        />
+                      </div>
+                    )}
                     {current.reportImages && current.reportImages.length > 0 && (
                       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {current.reportImages.map((image, index) => (
-                          <img
-                            key={image}
-                            src={image}
-                            alt={`Week ${current.week} activity ${index + 1}`}
-                            className="aspect-[4/3] w-full rounded-xl border border-hairline bg-canvas/40 object-cover"
-                          />
-                        ))}
+                        {current.reportImages.map((media, index) => {
+                          if (media.endsWith(".mp4")) {
+                            return (
+                              <video
+                                key={media}
+                                src={media}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                controls
+                                className="aspect-[4/3] w-full rounded-xl border border-hairline bg-canvas/40 object-cover"
+                              />
+                            );
+                          }
+                          return (
+                            <img
+                              key={media}
+                              src={media}
+                              alt={`Week ${current.week} activity ${index + 1}`}
+                              className="aspect-[4/3] w-full rounded-xl border border-hairline bg-canvas/40 object-cover"
+                            />
+                          );
+                        })}
                       </div>
                     )}
                   </div>

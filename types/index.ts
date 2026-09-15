@@ -56,6 +56,7 @@ export interface ProtosemWeek {
   githubUrl?: string;
   assignmentPoints?: string[];
   reportImages?: string[];
+  reportVideo?: string;
   fileLogImage?: string;
   fileLogImages?: string[];
 }
