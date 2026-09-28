@@ -396,70 +396,131 @@ export const protosemWeeks: ProtosemWeek[] = [
   },
   {
     week: 6,
-    title: "Week 6 Report – Problem Refinement, UI/UX & Electronics",
-    image: "/images/protosem/week-06-figma-wireframe.png",
-    fileLogImage: "/images/protosem/week-06-figma-wireframe.png",
+    title: "Week 06 — ESP32 Game Development & Embedded Programming",
+    image: "/images/protosem/week-06-dot-move-game.jpg",
+    fileLogImage: "/images/protosem/week-06-dot-move-game.jpg",
     fileLogImages: [
-      "/images/protosem/week-06-figma-wireframe.png",
-      "/images/protosem/week-06-soldering.jpeg"
+      "/images/protosem/week-06-dot-move-game.jpg",
+      "/images/protosem/week-06-esp32-display.jpg"
     ],
     description:
-      "Refined the finance-tracking problem statement through survey data analysis and feedback from Charath Sir, created Figma wireframes and site maps, attended an Arduino microcontroller workshop, and completed hands-on circuit soldering and battery testing.",
+      "Explored embedded programming with ESP32 by developing Dot Move, an interactive real-time game where players dodge falling dots with progressive difficulty, object generation, collision detection, and score tracking.",
     overview:
-      "Week 6 combined problem refinement, UI/UX wireframing, and hands-on electronics. We continued refining our selected problem statement from the previous week, bridging user research with digital solution design.\n\nWe analyzed user survey responses to identify core needs and discussed our understanding with Charath Sir, whose guidance helped structure our approach. For UI/UX development, we mapped user flows and created Figma wireframes and site maps for a finance-tracking solution.\n\nIn hardware, we attended an introductory Arduino and microcontroller session exploring software-hardware integration. I also completed an individual soldering and circuit assembly activity, carefully placing components, soldering joints, and testing the finished circuit using a battery.",
+      "Building an Interactive Game with ESP32 — DEVELOPMENT\n\nWeek 6 focused on applying embedded programming concepts through the development of an interactive game using the ESP32. Instead of working only with basic component circuits, I used the microcontroller to implement the logic and behaviour of Dot Move, a game where the player must dodge falling dots while controlling player movement.\n\nThe game was designed with a progressive difficulty mechanism. As the player's score increases, the falling dots become faster and the number of falling dots also increases, making the gameplay progressively more challenging. This required implementing game logic for player movement, object generation, collision detection, score tracking, and dynamic difficulty adjustment.\n\nWorking on the project helped me understand how an ESP32 can be used beyond basic hardware control to create interactive and real-world applications. I also gained practical experience in structuring program logic around continuous input, screen updates, object movement, and game-state changes.\n\nOverall, this activity strengthened my understanding of embedded programming, real-time interaction, logical problem solving, and microcontroller-based application development.",
     objectives: [
-      "Review user survey responses and challenge brief to ground problem definition in empirical research.",
-      "Present problem analysis to Charath Sir and refine solution requirements based on expert feedback.",
-      "Map user journeys, site structure, and wireframes for a finance-tracking digital solution in Figma.",
-      "Learn Arduino microcontroller fundamentals and hardware-software interaction workflows.",
-      "Gain individual hands-on soldering experience with electronic components, PCB assembly, and battery testing.",
+      "Developed the Dot Move game using ESP32.",
+      "Implemented player movement to dodge falling dots.",
+      "Added score tracking based on gameplay progress.",
+      "Programmed falling-dot movement and generation.",
+      "Implemented increasing difficulty as the score rises.",
+      "Increased both falling speed and the number of dots at higher scores.",
+      "Tested the game logic and adjusted the gameplay behaviour.",
     ],
     activitiesConducted: [
-      "Analyzed survey data and challenge brief to identify user pain points for the finance-tracking initiative.",
-      "Engaged in a structured problem refinement review session with Charath Sir.",
-      "Constructed user flows, site maps, and low-fidelity screen wireframes in Figma.",
-      "Attended full-day Arduino and basic electronics workshop covering microcontrollers and component circuits.",
-      "Assembled, soldered, and verified an electronic circuit using a battery source.",
+      "Programmed real-time player movement and object controls in Arduino IDE for ESP32.",
+      "Constructed progressive difficulty scaling logic to adjust falling dot speeds and counts dynamically.",
+      "Built score tracking, collision detection boundaries, and loop state updates.",
+      "Tested and tuned gameplay responsiveness on the ESP32 hardware display.",
     ],
     technologies: [
-      "Figma & Wireframing",
-      "UI/UX & User Flow Mapping",
-      "Arduino & Microcontrollers",
-      "Electronic Circuit Assembly",
-      "Soldering Machine",
-      "Problem Refinement",
-      "User Survey Analysis"
+      "ESP32",
+      "Embedded Programming",
+      "Arduino IDE",
+      "Game Logic"
     ],
     skillsLearned: [
-      "Challenge Brief & Survey Analysis",
-      "Problem Refinement",
-      "User Flow & Site Map Planning",
-      "Figma Wireframing",
-      "Arduino Fundamentals",
-      "Microcontroller Integration",
-      "Electronic Component Handling",
-      "PCB Soldering & Joint Assembly",
-      "Circuit Connection Verification",
+      "Embedded Programming",
+      "ESP32 Development",
+      "Game Logic",
+      "Real-Time Programming",
+      "Problem Solving",
+      "Debugging",
+      "Logical Thinking",
     ],
     challenges:
-      "Translating qualitative survey responses into structured screen flows in Figma, ensuring precise component alignment and joint connections during soldering to prevent short circuits, and verifying hardware operation under battery power.",
+      "The main challenge was creating a smooth and progressively difficult gameplay experience. The game needed to continuously track player movement, update falling objects, detect interactions, and increase the difficulty without disrupting the overall game flow.",
     reportImages: [
-      "/images/protosem/week-06-soldering.jpeg"
+      "/images/protosem/week-06-esp32-display.jpg",
+      "/images/protosem/week-06-testing.jpg",
+      "/images/protosem/week-06-figma.png",
+      "/images/protosem/week-06-circuit.jpeg"
     ],
-    reportVideo: "/images/protosem/week-06-circuit-testing.mp4",
+    reportVideo: "/images/protosem/week-06-circuit-video.mp4",
     gallery: [
-      "/images/protosem/week-06-figma-wireframe.png",
-      "/images/protosem/week-06-soldering.jpeg",
-      "/images/protosem/week-06-circuit-testing.mp4"
+      "/images/protosem/week-06-dot-game.jpg",
+      "/images/protosem/week-06-esp32-display.jpg",
+      "/images/protosem/week-06-testing.jpg",
+      "/images/protosem/week-06-figma.png",
+      "/images/protosem/week-06-circuit.jpeg",
+      "/images/protosem/week-06-soldering-new.jpeg",
+      "/images/protosem/week-06-circuit-video.mp4"
     ],
     githubUrl: "https://github.com/Harinath07-cell/ott_platform_ui",
     assignmentPoints: [
-      "User Survey & Challenge Brief Analysis: Evaluated survey responses and challenge brief to define user-centered requirements for finance tracking.",
-      "Expert Feedback & Problem Refinement: Presented problem understanding to Charath Sir and refined requirements based on guidance.",
-      "Figma Wireframing & Site Mapping: Developed screen layouts, site maps, and user navigation flows in Figma for a finance-tracking solution.",
-      "Arduino & Microcontroller Workshop: Explored basic microcontroller workflows and software-hardware integration.",
-      "Practical Soldering & Circuit Assembly: Soldered components individually onto a circuit board and verified live electrical connectivity using a battery.",
+      "01. ESP32 Game Development: Developed the Dot Move interactive game on ESP32 microcontroller with real-time display logic.",
+      "02. Dynamic Player Movement & Collision: Programmed player movement mechanics to dodge procedurally generated falling dots.",
+      "03. Progressive Difficulty Mechanism: Implemented dynamic speed scaling and multi-object generation as player score rises.",
+      "04. Game State & Score Tracking: Built real-time score counters, collision detection, and continuous loop state updates.",
     ],
   },
-  // Weeks 7–24: add new entries here as the internship progresses.
+  {
+    week: 7,
+    title: "Week 07 — IoT & Connectivity: Connecting Hardware to the Web",
+    image: "/images/protosem/week-07-esp32-webcontrol.jpeg",
+    fileLogImage: "/images/protosem/week-07-esp32-webcontrol.jpeg",
+    fileLogImages: [
+      "/images/protosem/week-07-esp32-webcontrol.jpeg"
+    ],
+    description:
+      "Explored IoT device communication with web applications using ESP32 & Arduino IDE, implementing HTTP web server controls, MQTT broker messaging for relay-based 230W bulb control, and IFTTT voice automation.",
+    overview:
+      "This week focused on understanding how IoT devices communicate with web applications and external services. Through hands-on sessions with the ESP32 and Arduino IDE, I explored different approaches for sending commands to physical hardware using HTTP, MQTT, and voice-triggered automation.\n\n01 — ESP32 Web Control: Programmed the ESP32 using the Arduino IDE and created a web-based control mechanism to operate the ESP32's built-in LED through HTTP commands.\n\n02 — MQTT-Based Device Control: Connected an ESP32 to a relay module and used MQTT communication to remotely control a 230W bulb. This helped me understand how lightweight messaging protocols can be used for communication between IoT devices and control interfaces.\n\n03 — Voice-Controlled IoT: Extended the same hardware setup to support voice-based control using IFTTT. This demonstrated how external automation services can connect user commands with physical IoT devices.",
+    objectives: [
+      "Program the ESP32 microcontroller using Arduino IDE to host an HTTP web control server.",
+      "Interface a 1-channel relay module with the ESP32 to control a high-voltage 230W AC bulb safely.",
+      "Implement lightweight MQTT pub/sub protocol messaging for real-time remote hardware control.",
+      "Connect voice commands to physical IoT hardware via IFTTT webhooks and automation workflows.",
+      "Analyze the complete hardware-software command pipeline from UI/Voice -> Protocol -> ESP32 -> Relay -> Appliance.",
+    ],
+    activitiesConducted: [
+      "Configured ESP32 web server in Arduino IDE to toggle built-in LED via HTTP commands.",
+      "Wired ESP32 to a relay module and established MQTT broker connectivity to switch a 230W bulb.",
+      "Created IFTTT applets to link voice assistant commands to physical relay switching.",
+      "Performed troubleshooting and latency testing across HTTP, MQTT, and IFTTT control methods.",
+    ],
+    technologies: [
+      "ESP32",
+      "Arduino IDE",
+      "HTTP Protocol",
+      "MQTT Broker",
+      "Relay Module",
+      "IFTTT Automation",
+      "Hardware-Software Integration"
+    ],
+    skillsLearned: [
+      "ESP32 Programming",
+      "Arduino Development",
+      "IoT Communication",
+      "HTTP-Based Device Control",
+      "MQTT Communication",
+      "Relay Interfacing",
+      "Hardware–Software Integration",
+      "IoT Automation",
+      "Troubleshooting",
+    ],
+    challenges:
+      "Working with multiple communication methods required understanding how a command travels from the user interface or external service → communication protocol → ESP32 → relay → physical device.",
+    reportImages: [],
+    gallery: [
+      "/images/protosem/week-07-esp32-webcontrol.jpeg"
+    ],
+    viewMoreUrl: "/protosem/week-7",
+    assignmentPoints: [
+      "01. ESP32 Web Control: Programmed ESP32 in Arduino IDE to operate built-in LED via HTTP commands from a web interface.",
+      "02. MQTT-Based Device Control: Connected ESP32 to a relay module and configured MQTT messaging to remotely switch a 230W bulb.",
+      "03. Voice-Controlled IoT Automation: Integrated IFTTT automation with MQTT/HTTP to trigger physical relay switching using voice commands.",
+      "04. Hardware-to-Software Protocol Flow: Mapped the complete command pipeline from UI/Voice -> Protocol (HTTP/MQTT) -> ESP32 -> Relay -> Physical Appliance.",
+    ],
+  },
+  // Weeks 8–24: add new entries here as the internship progresses.
 ];

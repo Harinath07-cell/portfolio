@@ -1,0 +1,112 @@
+analysis the entire file ,content ,flow and all the requirement 
+
+now ur task is to update the give requirement
+
+where
+ remove all the img from the week-07 protosem section and update the week-06 protosem section with all the img and videos that I had uploaded in the file week-6 in the folder weekly-update-img
+ also update the description for the weeo-06 
+(Week 06 — ESP32 Game Development & Embedded Programming
+Title
+
+Building an Interactive Game with ESP32
+
+Category
+
+DEVELOPMENT
+
+Overview
+
+Explored embedded programming with the ESP32 by developing an interactive game called Dot Move. The activity combined programming, input handling, real-time display logic, and increasing game difficulty to create a simple but engaging embedded gaming experience.
+
+WEEK 06 INSIGHTS
+
+Week 6 focused on applying embedded programming concepts through the development of an interactive game using the ESP32. Instead of working only with basic component circuits, I used the microcontroller to implement the logic and behaviour of Dot Move, a game where the player must dodge falling dots while controlling the player movement.
+
+The game was designed with a progressive difficulty mechanism. As the player's score increases, the falling dots become faster and the number of falling dots also increases, making the gameplay progressively more challenging. This required implementing game logic for player movement, object generation, collision detection, score tracking, and dynamic difficulty adjustment.
+
+Working on the project helped me understand how an ESP32 can be used beyond basic hardware control to create interactive and real-time applications. I also gained practical experience in structuring program logic around continuous input, screen updates, object movement, and game-state changes.
+
+Overall, this activity strengthened my understanding of embedded programming, real-time interaction, logical problem solving, and microcontroller-based application development.
+
+What I Worked On
+Developed the Dot Move game using ESP32.
+Implemented player movement to dodge falling dots.
+Added score tracking based on gameplay progress.
+Programmed falling-dot movement and generation.
+Implemented increasing difficulty as the score rises.
+Increased both falling speed and the number of dots at higher scores.
+Tested the game logic and adjusted the gameplay behaviour.
+Technologies & Tools
+
+ESP32 · Embedded Programming · Arduino IDE · Game Logic
+
+Skills Developed
+Embedded Programming
+ESP32 Development
+Game Logic
+Real-Time Programming
+Problem Solving
+Debugging
+Logical Thinking
+Challenge
+
+The main challenge was creating a smooth and progressively difficult gameplay experience. The game needed to continuously track player movement, update falling objects, detect interactions, and increase the difficulty without disrupting the overall game flow.
+
+Key Takeaway
+
+This week showed me how a microcontroller can be used to build interactive real-time applications, combining hardware capabilities with programming logic to create a complete working experience.
+
+Highlight
+
+Started with a microcontroller. Built a game. Learned how embedded logic can become an interactive experience.
+)
+
+
+for the week-07 section in protosem add the img in the file wee-7 in the folder weekly-update-img 
+
+
+
+
+
+\\updater in page in the week-7 on clicking to  the view more option a new page should be opened in this page containe all the brafe explanation of all the project,activities that was done hat week also about whaty are the components that worked on about its discretion on a table 
+
+in this I need a dashboard with the same theam and style in the main page
+
+the img,videos for each section will be on the file weekly-update-img in file week-7 in the file week-7-detail-img
+
+
+I will set u the flow for the web site 
+
+what all are the different section in the dashboard 
+
+Overview,Activity,Project,Componenets-Worked,Discription
+(make shure that each section are navigated properly with the section moving )
+
+Overeview section 
+
+I need a complete short Overview of this week-7 (refer the content from the description of week-07 protosem section)
+
+Activity section
+
+that mention all the project that was worked on along with a dropdown bar
+(on clicking on the activities there should be a dropdown where contain all description of the project) 
+
+
+Project 
+
+there should be individual card section for each Projects on the interface of the card there should be a img of the Project (refer the img of the activity (for each project there imgs are on activity1,activity2,... file in week-7-detail-img file) on clicking on the section it should lead to a new page that contain all the detailed description of the project where firest a short intro of the project along with the components used in the projects ,next is the Implementation where there should be imgs and working video if I uplodede in the file. used,the other is Instes after that there should be a section that display the code that io used make this section where the code is shown look like terminal theam there there should be a section that mentiones the step by stepo implementation of the projects its complete flow and description,key ponts to notes and finally the complementation of how did I implemented after that there should be two section one is Key technology 
+at last there should be a back button that lead to the previous page
+
+these should be there for all the prrjects that I would upload 
+
+
+in components section 
+
+first there should be a section that contain the img of the of the and next a table that mentios all the components that was used in all this project and its use
+
+Discription section 
+
+contains all the key take away from the activity and projects and how did it hep me 
+
+
+at last there shoul be a back button that lead me back to the main page to the protosem section 

@@ -324,6 +324,14 @@ export function Protosem() {
                         <Github size={14} /> Repository
                       </a>
                     )}
+                    {current.viewMoreUrl && (
+                      <a
+                        href={current.viewMoreUrl}
+                        className="flex items-center gap-1.5 rounded-full border border-indigo-soft/50 bg-indigo/10 px-4 py-2 text-xs font-medium text-indigo-soft transition-colors hover:bg-indigo/20 hover:text-ink"
+                      >
+                        View more <ChevronRight size={14} />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
