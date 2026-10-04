@@ -26,7 +26,7 @@ export interface ProjectDetail {
   systemDesign: {
     image?: string;
     imageCaption?: string;
-    diagram: string;
+    diagram?: string;
     explanation: string;
   };
 
@@ -977,19 +977,6 @@ void MQTT_connect() {
     systemDesign: {
       image: "/evidence-img-week-7/System Design & Data Flow-p4.png",
       imageCaption: "Fig 3.1: 4-Layer System Design & Data Flow Architecture — Sensor Layer, ESP32 Processing Layer, Firebase Cloud Layer & Web Dashboard Application Layer.",
-      diagram: `DHT11 (Temp/Humidity) + LDR (Light)
-                │
-                ▼
-       [ ESP32 Edge Device ]
-                │  Wi-Fi / HTTPS
-                ▼
-  [ Firebase Realtime Database ]
-          ▲            │
-          │            ▼
-   [ Web Dashboard (Auth) ]
-          │
-          ▼  Bulb Control State
-  [ Firebase Database ] ──► [ ESP32 ] ──► [ Bulb / Relay Output ]`,
       explanation:
         "The complete architecture is divided into four distinct layers: 1) Sensor Layer: DHT11 measures ambient temperature and humidity, while the LDR detects surrounding light levels. 2) Processing Layer: ESP32 processes analog and digital sensor readings, validates data integrity, and handles network transmissions. 3) Cloud Layer: Firebase Realtime Database stores the latest telemetry values in a JSON tree and maintains persistent synchronization sockets. 4) Application Layer: An authenticated responsive web dashboard visualizes real-time metrics and publishes bulb control states back to the cloud."
     },
@@ -1279,59 +1266,6 @@ void loop() {
     systemDesign: {
       image: "/evidence-img-week-7/System Design & Data Flow-p5.png",
       imageCaption: "Fig 3.1: 5-Layer System Architecture — Sensing Layer, ESP32 Processing Layer, Firebase Cloud Layer, Web Dashboard Application Layer, and Load Output Layer.",
-      diagram: `                   ┌──────────────────┐
-                   │      DHT11       │
-                   │ Temperature      │
-                   │ Humidity         │
-                   └────────┬─────────┘
-                            │
-                            ▼
-                   ┌──────────────────┐
-                   │                  │
-                   │      ESP32       │
-                   │                  │
-                   │ Sensor Processing│
-                   │ Control Logic    │
-                   └────────┬─────────┘
-                            ▲
-                            │
-                   ┌────────┴─────────┐
-                   │       LDR        │
-                   │  Light Sensing   │
-                   └──────────────────┘
-                            │
-                            │ Wi-Fi
-                            ▼
-                ┌─────────────────────────┐
-                │        Firebase         │
-                │   Realtime Database     │
-                ├─────────────────────────┤
-                │ Current Data            │
-                │ Historical Logs         │
-                │ Control State           │
-                │ LDR Threshold           │
-                └───────────┬─────────────┘
-                            ↕
-                ┌─────────────────────────┐
-                │     Web Dashboard       │
-                ├─────────────────────────┤
-                │ Temperature             │
-                │ Humidity                │
-                │ LDR                     │
-                │ Bulb Status             │
-                │ Manual / Auto Mode      │
-                │ Historical Data         │
-                │ CSV Export              │
-                └───────────┬─────────────┘
-                            │
-                            │ Control
-                            ▼
-                       ┌─────────┐
-                       │  ESP32  │
-                       └────┬────┘
-                            │
-                            ▼
-                         Bulb`,
       explanation:
         "The complete architecture is structured into five distinct operational layers: 1) Sensing Layer: DHT11 measures temperature and humidity; LDR detects ambient illumination. 2) Processing Layer: ESP32 processes sensor signals, handles NTP clock synchronization, and executes dual-mode threshold decision logic. 3) Cloud Layer: Firebase Realtime Database partitions live data (/iot/current), user control parameters (/iot/control), and historical logs (/iot/history). 4) Application Layer: An authenticated web dashboard enables real-time monitoring, threshold adjustment, tabular historical inspection, and client-side CSV compilation. 5) Output Layer: Isolated relay driver controlling the high-voltage or demonstration bulb load."
     },

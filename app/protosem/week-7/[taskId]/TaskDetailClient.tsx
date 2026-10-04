@@ -213,9 +213,11 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
               </div>
             )}
 
-            <div className="overflow-x-auto rounded-xl border border-hairline bg-[#0D1117] p-5 font-mono text-xs sm:text-sm text-cyan leading-relaxed">
-              <pre>{project.systemDesign.diagram}</pre>
-            </div>
+            {project.systemDesign.diagram && (
+              <div className="overflow-x-auto rounded-xl border border-hairline bg-[#0D1117] p-5 font-mono text-xs sm:text-sm text-cyan leading-relaxed">
+                <pre>{project.systemDesign.diagram}</pre>
+              </div>
+            )}
 
             <p className="text-xs sm:text-sm leading-relaxed text-ink-muted">
               {project.systemDesign.explanation}

@@ -428,28 +428,13 @@ export default function Week7DashboardPage() {
               <span className="font-mono text-xs text-ink-faint">Section 04</span>
             </div>
 
-            {/* Hardware Image Showcase */}
-            <div className="glass-panel overflow-hidden rounded-2xl p-6">
-              <div className="grid gap-6 sm:grid-cols-2 items-center">
-                <div className="space-y-3">
-                  <div className="overflow-hidden rounded-xl border border-hairline bg-black/40">
-                    <img
-                      src="/images/protosem/week-07-esp32-webcontrol.jpeg"
-                      alt="Hardware Components Setup"
-                      className="aspect-video w-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                  </div>
-                  <p className="text-xs font-mono text-ink-faint">
-                    Fig: ESP32 development board, DHT11 sensor, LDR divider, relay module, and bulb load.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <h3 className="font-display text-lg text-ink font-semibold">Hardware Integration Overview</h3>
-                  <p className="text-xs leading-relaxed text-ink-muted">
-                    Every project combined low-power microcontroller logic (3.3V/5V) with environmental sensors (DHT11, LDR) and isolated high-voltage AC load actuation (230V mains). Using optical isolation modules ensured zero electrical back-feed, protecting the ESP32 while enabling sub-second switching.
-                  </p>
-                </div>
+            {/* Hardware Integration Overview */}
+            <div className="glass-panel rounded-2xl p-6">
+              <div className="space-y-2">
+                <h3 className="font-display text-lg text-ink font-semibold">Hardware Integration Overview</h3>
+                <p className="text-xs sm:text-sm leading-relaxed text-ink-muted">
+                  Every project combined low-power microcontroller logic (3.3V/5V) with environmental sensors (DHT11, LDR) and isolated high-voltage AC load actuation (230V mains). Using optical isolation modules ensured zero electrical back-feed, protecting the ESP32 while enabling sub-second switching.
+                </p>
               </div>
             </div>
 
