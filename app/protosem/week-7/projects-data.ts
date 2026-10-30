@@ -87,7 +87,7 @@ export const PROJECTS: ProjectDetail[] = [
     category: "Web & Microcontroller",
     shortIntro:
       "Designed and deployed an embedded HTTP web server on the ESP32 microcontroller using Arduino IDE to control hardware GPIO pins directly through a browser user interface over local Wi-Fi.",
-    coverImage: "/evidence-img-week-7/System Design & Data Flow-p1.png",
+    coverImage: "/evidence-img-week-7/activity-coverpage/Task 1/ESP32 Web Server LED Control Flow.png",
     repositoryUrl: "https://github.com/Harinath07-cell/IoT-Connectivity",
 
     overview: {
@@ -351,7 +351,7 @@ void loop() {
     category: "Cloud-Based ESP32 Control using MQTT and Adafruit IO",
     shortIntro:
       "This project extends the local ESP32 web-control system into a cloud-connected IoT architecture. The ESP32 communicates with Adafruit IO using the MQTT protocol, allowing the built-in LED to be controlled remotely through a cloud dashboard.",
-    coverImage: "/evidence-img-week-7/System Design & Data Flow-p2.png",
+    coverImage: "/evidence-img-week-7/activity-coverpage/Task 2/Adafruit IO MQTT ESP32 Flow Diagram.png",
     repositoryUrl: "https://github.com/Harinath07-cell/IoT-Connectivity/tree/Harinath07-Assesinment-2",
 
     overview: {
@@ -652,7 +652,7 @@ void MQTT_connect() {
     category: "IFTTT-Based ESP32 Automation using Adafruit IO and MQTT",
     shortIntro:
       "This task extends the cloud-based ESP32 control developed in Task 2 by introducing IoT automation using IFTTT. Instead of manually controlling the LED from an Adafruit IO dashboard, an IFTTT trigger is used to automatically send an ON/OFF command to an Adafruit IO feed. The ESP32 receives this command through MQTT and controls its built-in LED through GPIO 2.",
-    coverImage: "/evidence-img-week-7/System Design & Data Flow-p3.png",
+    coverImage: "/evidence-img-week-7/activity-coverpage/Task 3/Neon IoT Automation System Flow.png",
     repositoryUrl: "https://github.com/Harinath07-cell/IoT-Connectivity/tree/Harinath07-Assignment-3",
 
     overview: {
@@ -955,7 +955,7 @@ void MQTT_connect() {
     category: "ESP32 Environmental Monitoring and Remote Bulb Control using Firebase",
     shortIntro:
       "This task extends the previous IoT work by introducing Firebase as the cloud backend for monitoring and controlling an ESP32-based system. The ESP32 collects temperature, humidity, and light-level data using a DHT11 sensor and LDR, sends the readings to Firebase Realtime Database, and receives bulb-control commands from the cloud dashboard. A web dashboard provides authenticated access to the live sensor data and allows the user to control the connected bulb remotely.",
-    coverImage: "/evidence-img-week-7/System Design & Data Flow-p4.png",
+    coverImage: "/evidence-img-week-7/activity-coverpage/Task 4/Firebase IoT Monitoring System Flow.png",
     repositoryUrl: "https://github.com/Harinath07-cell/IoT-Connectivity/tree/Assignment-4",
 
     overview: {
@@ -1244,7 +1244,7 @@ void loop() {
     category: "Complete IoT Monitoring, Automatic Lighting and Historical Data System",
     shortIntro:
       "This task extends the Firebase IoT monitoring system developed in Task 4 by adding historical data logging, automatic lighting control, manual/automatic operating modes, configurable LDR threshold, and CSV data export. The ESP32 continuously collects temperature, humidity, and light-level data, stores timestamped readings in Firebase Realtime Database, and controls the bulb based on either manual commands or the surrounding light level. A web dashboard is used to monitor the current values, change the operating mode, control the bulb, view historical data, and export the collected information as a CSV file.",
-    coverImage: "/evidence-img-week-7/System Design & Data Flow-p5.png",
+    coverImage: "/evidence-img-week-7/activity-coverpage/Task 5/Firebase IoT Monitoring Workflow.png",
     repositoryUrl: "https://github.com/Harinath07-cell/IoT-Connectivity/tree/Harinath07-Assignment-5",
 
     overview: {

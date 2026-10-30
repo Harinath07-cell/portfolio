@@ -92,24 +92,6 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
             <p className="text-base text-ink-muted sm:text-lg max-w-4xl leading-relaxed">
               {project.shortIntro}
             </p>
-
-            {project.coverImage && (
-              <div className="group relative overflow-hidden rounded-2xl border border-hairline bg-black/40">
-                <img
-                  src={encodeURI(project.coverImage)}
-                  alt={`${project.title} Cover`}
-                  className="w-full h-auto max-h-[440px] object-contain transition-transform duration-500 group-hover:scale-[1.01]"
-                />
-                <a
-                  href={encodeURI(project.coverImage)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-lg bg-black/75 px-3 py-1.5 font-mono text-xs text-cyan opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100 hover:text-white"
-                >
-                  <ExternalLink size={12} /> View Full Cover
-                </a>
-              </div>
-            )}
           </div>
 
           {/* 1. OVERVIEW */}
