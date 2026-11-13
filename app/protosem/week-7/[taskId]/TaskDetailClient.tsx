@@ -21,7 +21,11 @@ import {
   Play,
   AlertTriangle,
   ShieldCheck,
-  Zap
+  Zap,
+  Send,
+  Database,
+  Activity,
+  FileCode
 } from "lucide-react";
 import { ProjectDetail } from "../projects-data";
 
@@ -31,11 +35,18 @@ interface TaskDetailClientProps {
 
 export default function TaskDetailClient({ project }: TaskDetailClientProps) {
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
+  const [copiedSecondaryCode, setCopiedSecondaryCode] = useState<boolean>(false);
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
+  };
+
+  const handleCopySecondaryCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedSecondaryCode(true);
+    setTimeout(() => setCopiedSecondaryCode(false), 2000);
   };
 
   return (
@@ -161,6 +172,31 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
                 </p>
               </div>
             </div>
+
+            {project.concepts.keyConceptsList && project.concepts.keyConceptsList.length > 0 && (
+              <div className="space-y-4 pt-4 border-t border-hairline">
+                <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-cyan">
+                  Detailed Concept Specifications & Technical Deep-Dive
+                </h3>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {project.concepts.keyConceptsList.map((concept, idx) => (
+                    <div key={idx} className="rounded-xl border border-hairline bg-canvas/40 p-4 sm:p-5 space-y-2.5">
+                      <div className="flex items-start justify-between gap-2">
+                        <h4 className="font-display text-sm font-semibold text-ink">{concept.title}</h4>
+                        {concept.subtitle && (
+                          <span className="font-mono text-[10px] text-cyan bg-cyan/10 px-2 py-0.5 rounded-full border border-cyan/20 flex-none">
+                            {concept.subtitle}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs sm:text-sm leading-relaxed text-ink-muted whitespace-pre-line">
+                        {concept.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
 
           {/* 3. SYSTEM DESIGN */}
@@ -198,6 +234,47 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
             {project.systemDesign.diagram && (
               <div className="overflow-x-auto rounded-xl border border-hairline bg-[#0D1117] p-5 font-mono text-xs sm:text-sm text-cyan leading-relaxed">
                 <pre>{project.systemDesign.diagram}</pre>
+              </div>
+            )}
+
+            {project.systemDesign.jsonSchema && (
+              <div className="space-y-2">
+                <p className="font-mono text-xs font-semibold text-indigo-soft flex items-center gap-1.5">
+                  <Database size={14} className="text-cyan" /> Cloud Database JSON Document Schema Structure
+                </p>
+                <div className="overflow-x-auto rounded-xl border border-hairline bg-[#0D1117] p-4 font-mono text-xs text-cyan leading-relaxed">
+                  <pre>{project.systemDesign.jsonSchema}</pre>
+                </div>
+              </div>
+            )}
+
+            {project.systemDesign.schemaTable && project.systemDesign.schemaTable.length > 0 && (
+              <div className="space-y-3">
+                <p className="font-mono text-xs font-semibold text-cyan flex items-center gap-1.5">
+                  <Table size={14} className="text-indigo-soft" /> Data Topics, Paths & Telemetry Channels
+                </p>
+                <div className="overflow-x-auto rounded-xl border border-hairline">
+                  <table className="w-full text-left font-mono text-xs sm:text-sm">
+                    <thead className="border-b border-hairline bg-white/5 text-ink">
+                      <tr>
+                        <th className="p-3">Data Channel / Path</th>
+                        <th className="p-3">Type</th>
+                        <th className="p-3">Direction</th>
+                        <th className="p-3">Role & Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-hairline text-ink-muted">
+                      {project.systemDesign.schemaTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/5">
+                          <td className="p-3 font-bold text-cyan">{row.field}</td>
+                          <td className="p-3 text-indigo-soft">{row.type}</td>
+                          <td className="p-3">{row.direction}</td>
+                          <td className="p-3">{row.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
@@ -362,6 +439,70 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
                 </div>
               ))}
             </div>
+
+            {project.implementation.commandFlowSteps && project.implementation.commandFlowSteps.length > 0 && (
+              <div className="glass-panel rounded-2xl p-6 space-y-4">
+                <h3 className="font-display text-base text-ink font-semibold flex items-center gap-2">
+                  <Send size={18} className="text-cyan" /> Step-by-Step Command Transmission Sequence
+                </h3>
+                <div className="space-y-2.5">
+                  {project.implementation.commandFlowSteps.map((step, idx) => (
+                    <div key={idx} className="flex items-start gap-3 rounded-xl border border-hairline bg-canvas/60 p-3.5">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan/10 font-mono text-[11px] font-bold text-cyan flex-none">
+                        {idx + 1}
+                      </span>
+                      <p className="text-xs sm:text-sm text-ink-muted leading-relaxed pt-0.5">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {project.implementation.secondaryCodeSnippet && (
+              <div className="space-y-4 pt-4 border-t border-hairline">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-display text-base text-ink font-semibold flex items-center gap-2">
+                    <FileCode size={18} className="text-indigo-soft" /> {project.implementation.secondaryCodeTitle || "Frontend Interface Source Code"}
+                  </h3>
+                </div>
+                {project.implementation.secondaryCodeDesc && (
+                  <p className="text-xs sm:text-sm leading-relaxed text-ink-muted">
+                    {project.implementation.secondaryCodeDesc}
+                  </p>
+                )}
+                <div className="overflow-hidden rounded-2xl border border-hairline bg-[#0D1117] shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-white/10 bg-[#161B22] px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-red-500/80 inline-block" />
+                      <span className="h-3 w-3 rounded-full bg-yellow-500/80 inline-block" />
+                      <span className="h-3 w-3 rounded-full bg-green-500/80 inline-block" />
+                      <span className="ml-2 font-mono text-xs text-slate-400 flex items-center gap-1.5">
+                        <Terminal size={12} className="text-indigo-soft" /> {project.implementation.secondaryCodeTitle || "dashboard.html"}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => handleCopySecondaryCode(project.implementation.secondaryCodeSnippet || "")}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                      {copiedSecondaryCode ? (
+                        <>
+                          <Check size={12} className="text-green-400" /> Copied!
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={12} /> Copy Code
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="overflow-x-auto p-4 sm:p-6 font-mono text-xs sm:text-sm text-cyan/90 leading-relaxed max-h-[500px]">
+                    <pre>{project.implementation.secondaryCodeSnippet}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* 7. CONFIGURATION */}
@@ -481,7 +622,60 @@ export default function TaskDetailClient({ project }: TaskDetailClientProps) {
                 )}
               </div>
             )}
+
+            {project.evidence.demonstrationNote && (
+              <div className="flex items-start gap-3 rounded-xl border border-cyan/30 bg-cyan/5 p-4 mt-4">
+                <Zap size={18} className="text-cyan flex-none mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-mono text-xs font-semibold text-cyan">Hardware & Demonstration Verification</p>
+                  <p className="text-xs sm:text-sm text-ink-muted leading-relaxed">
+                    {project.evidence.demonstrationNote}
+                  </p>
+                </div>
+              </div>
+            )}
           </section>
+
+          {/* TESTING & EXPERIMENTAL VALIDATION */}
+          {project.testingValidation && project.testingValidation.length > 0 && (
+            <section className="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="flex items-center justify-between border-b border-hairline pb-3">
+                <h2 className="flex items-center gap-2 font-display text-xl text-ink font-semibold">
+                  <Activity size={20} className="text-cyan" /> Multi-Condition Experimental Testing & Verification
+                </h2>
+                <span className="font-mono text-xs text-ink-faint">Testing Matrix</span>
+              </div>
+
+              <div className="overflow-x-auto rounded-xl border border-hairline">
+                <table className="w-full text-left font-sans text-xs sm:text-sm">
+                  <thead className="border-b border-hairline bg-white/5 font-mono text-xs uppercase tracking-wider text-cyan">
+                    <tr>
+                      <th className="p-3">Test Scenario</th>
+                      <th className="p-3">Condition Tested</th>
+                      <th className="p-3">Expected Output</th>
+                      <th className="p-3">Observed Hardware Behavior</th>
+                      <th className="p-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-hairline text-ink-muted">
+                    {project.testingValidation.map((test, idx) => (
+                      <tr key={idx} className="hover:bg-white/5">
+                        <td className="p-3 font-semibold text-ink">{test.scenario}</td>
+                        <td className="p-3 font-mono text-xs text-indigo-soft">{test.condition}</td>
+                        <td className="p-3">{test.expectedResult}</td>
+                        <td className="p-3">{test.observedResult}</td>
+                        <td className="p-3 font-mono font-bold text-emerald-400">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/30">
+                            <Check size={12} /> {test.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
 
           {/* 9. CHALLENGES & FIXES */}
           <section className="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
