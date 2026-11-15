@@ -23,7 +23,8 @@ const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
 // 3. Hardware Configuration
 // =====================================================
 
-#define LED_PIN 2
+// Relay module (active LOW) on GPIO 23 switches the bulb
+#define RELAY_PIN 23
 
 // =====================================================
 // 4. Wi-Fi and MQTT Client
@@ -141,16 +142,16 @@ void processCommand(String command)
   command.toUpperCase();
 
   // ---------------------------------------------------
-  // Turn LED ON
+  // Turn bulb ON (active LOW relay)
   // ---------------------------------------------------
 
   if (command == "ON" ||
       command == "1" ||
       command == "TRUE")
   {
-    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(RELAY_PIN, LOW);
 
-    Serial.println("Action: LED turned ON");
+    Serial.println("Action: relay ON, bulb turned ON");
 
     // Send status back to Adafruit IO
     if (!statusFeed.publish("ON"))
@@ -164,16 +165,16 @@ void processCommand(String command)
   }
 
   // ---------------------------------------------------
-  // Turn LED OFF
+  // Turn bulb OFF
   // ---------------------------------------------------
 
   else if (command == "OFF" ||
            command == "0" ||
            command == "FALSE")
   {
-    digitalWrite(LED_PIN, LOW);
+    digitalWrite(RELAY_PIN, HIGH);
 
-    Serial.println("Action: LED turned OFF");
+    Serial.println("Action: relay OFF, bulb turned OFF");
 
     // Send status back to Adafruit IO
     if (!statusFeed.publish("OFF"))
@@ -213,11 +214,11 @@ void setup()
   Serial.println("ESP32 + Adafruit IO + MQTT");
   Serial.println("====================================");
 
-  // Configure LED
-  pinMode(LED_PIN, OUTPUT);
+  // Configure relay pin
+  pinMode(RELAY_PIN, OUTPUT);
 
-  // Start with LED OFF
-  digitalWrite(LED_PIN, LOW);
+  // Start with the bulb OFF (active LOW relay: HIGH = OFF)
+  digitalWrite(RELAY_PIN, HIGH);
 
   // Connect Wi-Fi
   connectWiFi();

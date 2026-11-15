@@ -2,20 +2,15 @@
 <html>
 <head>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>ESP32 Web Server LED Control</title>
+  <title>ESP32 LED Control</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; background-color: #0f172a; color: #f8fafc; padding-top: 50px; }
-    h1 { color: #38bdf8; margin-bottom: 30px; }
-    .btn { display: inline-block; padding: 15px 32px; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 12px; margin: 10px; transition: 0.3s; }
-    .btn-on { background-color: #00E5FF; color: #0f172a; }
-    .btn-off { background-color: #ef4444; color: #ffffff; }
-    .btn:hover { opacity: 0.85; transform: scale(1.05); }
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 60px; }
+    button { font-size: 28px; padding: 14px 34px; margin: 4px; background-color: #8fd3c7; border: 2px solid #888; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>ESP32 Web Server LED Control</h1>
-  <p>Control hardware GPIO 2 directly over Wi-Fi</p>
-  <p><a href='/led/on' class='btn btn-on'>TURN LED ON</a></p>
-  <p><a href='/led/off' class='btn btn-off'>TURN LED OFF</a></p>
+  <h1>ESP32 Built-in LED</h1>
+  <a href='/led/on'><button>ON</button></a>
+  <a href='/led/off'><button>OFF</button></a>
 </body>
 </html>

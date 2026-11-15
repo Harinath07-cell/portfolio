@@ -11,25 +11,20 @@ WebServer server(80);
 // Define LED GPIO Pin (GPIO 2 is built-in LED on ESP32 NodeMCU)
 const int ledPin = 2;
 
-// Handler for root URL ("/") -> Serves HTML Web Interface
+// Handler for root URL ("/") -> Serves the HTML control page
 void handleRoot() {
   String html = "<!DOCTYPE html><html><head>";
   html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
-  html += "<title>ESP32 Web Server LED Control</title>";
+  html += "<title>ESP32 LED Control</title>";
   html += "<style>";
-  html += "body { font-family: Arial, sans-serif; text-align: center; background-color: #0f172a; color: #f8fafc; padding-top: 50px; }";
-  html += "h1 { color: #38bdf8; margin-bottom: 30px; }";
-  html += ".btn { display: inline-block; padding: 15px 32px; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 12px; margin: 10px; transition: 0.3s; }";
-  html += ".btn-on { background-color: #00E5FF; color: #0f172a; }";
-  html += ".btn-off { background-color: #ef4444; color: #ffffff; }";
-  html += ".btn:hover { opacity: 0.85; transform: scale(1.05); }";
+  html += "body { font-family: Arial, sans-serif; text-align: center; margin-top: 60px; }";
+  html += "button { font-size: 28px; padding: 14px 34px; margin: 4px; background-color: #8fd3c7; border: 2px solid #888; cursor: pointer; }";
   html += "</style></head><body>";
-  html += "<h1>ESP32 Web Server LED Control</h1>";
-  html += "<p>Control hardware GPIO 2 directly over Wi-Fi</p>";
-  html += "<p><a href='/led/on' class='btn btn-on'>TURN LED ON</a></p>";
-  html += "<p><a href='/led/off' class='btn btn-off'>TURN LED OFF</a></p>";
+  html += "<h1>ESP32 Built-in LED</h1>";
+  html += "<a href='/led/on'><button>ON</button></a>";
+  html += "<a href='/led/off'><button>OFF</button></a>";
   html += "</body></html>";
-  
+
   server.send(200, "text/html", html);
 }
 
@@ -55,8 +50,7 @@ void setup() {
   digitalWrite(ledPin, LOW); // Initial State: OFF
 
   // Connect to Local Wi-Fi Network
-  Serial.print("Connecting to Wi-Fi: ");
-  Serial.println(ssid);
+  Serial.print("Connecting to Wi-Fi");
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -65,8 +59,8 @@ void setup() {
   }
 
   Serial.println();
-  Serial.println("[SUCCESS] Wi-Fi Connected!");
-  Serial.print("ESP32 Local IP Address: http://");
+  Serial.println("WiFi connected!");
+  Serial.print("ESP32 IP address: ");
   Serial.println(WiFi.localIP());
 
   // Bind HTTP Route Handlers
@@ -76,7 +70,7 @@ void setup() {
 
   // Start HTTP Server
   server.begin();
-  Serial.println("HTTP Web Server Started on Port 80.");
+  Serial.println("Web server started!");
 }
 
 void loop() {

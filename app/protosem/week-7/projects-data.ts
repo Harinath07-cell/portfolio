@@ -27,7 +27,7 @@ export interface Section {
 
 export interface MediaSlot {
   label: string;
-  kind: "image" | "video";
+  kind: "image" | "video" | "csv";
   hint: string;
 }
 
@@ -64,21 +64,35 @@ const media = (slot: string): Block => ({ type: "media", slot });
 
 const photo = (label: string, hint: string): MediaSlot => ({ label, kind: "image", hint });
 const video = (label: string, hint: string): MediaSlot => ({ label, kind: "video", hint });
+const csvFile = (label: string, hint: string): MediaSlot => ({ label, kind: "csv", hint });
 
 // ---------------------------------------------------------------------------
 // Reusable pieces
 // ---------------------------------------------------------------------------
 
-const ledHardware: Block = {
+const t1Hardware: Block = {
   type: "table",
   headers: ["Component", "Purpose in this project"],
   rows: [
-    ["ESP32 development board (ESP-WROOM-32)", "Microcontroller with built-in Wi-Fi; runs the firmware"],
-    ["On-board LED on GPIO 2", "Output that is switched ON/OFF"],
-    ["Micro-USB cable", "5 V power, uploading the sketch, Serial Monitor"],
-    ["Wi-Fi network / router", "Connects the ESP32 to the network"],
-    ["Laptop or phone", "Arduino IDE, browser / dashboard"],
-    ["Optional: relay module + bulb", "Used in the lab demonstration to switch a real bulb from the same GPIO 2 signal"],
+    ["ESP32 development board (ESP32 Dev Module)", "Microcontroller with built-in Wi-Fi; runs the web server firmware"],
+    ["On-board LED on GPIO 2", "The output that is switched ON/OFF — built into the board, no external wiring"],
+    ["Micro-USB cable", "5 V power, uploading the sketch and the Serial Monitor"],
+    ["Mobile hotspot (Wi-Fi network)", "The network that both the ESP32 and the laptop join"],
+    ["Laptop", "Arduino IDE and the web browser used as the control interface"],
+  ],
+};
+
+const relayHardware: Block = {
+  type: "table",
+  headers: ["Component", "Purpose in this project"],
+  rows: [
+    ["ESP32 development board (DevKit)", "Microcontroller with built-in Wi-Fi; runs the MQTT firmware"],
+    ["1-channel relay module (SRD-05VDC, active LOW)", "Isolated switch controlled from GPIO 23"],
+    ["230 V bulb in a holder", "The load that is switched ON/OFF through the relay"],
+    ["Fuse in the live wire", "Protects the mains side of the circuit"],
+    ["5 V USB supply", "Powers the ESP32; the relay VCC is fed from the ESP32 VIN pin"],
+    ["Jumper wires", "Signal, ground and supply connections"],
+    ["Wi-Fi network with internet access", "Needed to reach the cloud broker"],
   ],
 };
 
@@ -86,45 +100,59 @@ const sensorHardware: Block = {
   type: "table",
   headers: ["Component", "Purpose in this project"],
   rows: [
-    ["ESP32 development board", "Reads sensors, talks to Firebase over Wi-Fi, drives the relay"],
-    ["DHT11 sensor", "Digital temperature and humidity sensor (DATA on GPIO 4)"],
-    ["LDR (light dependent resistor)", "Ambient light sensor, read as an analog value on GPIO 34"],
-    ["10 kΩ resistor", "Forms a voltage divider with the LDR so the ESP32 ADC can read it"],
-    ["1-channel relay module", "Isolated switch between the ESP32 (GPIO 23) and the bulb"],
-    ["Bulb / demonstration load", "Output controlled from the dashboard or by the LDR logic"],
-    ["Breadboard and jumper wires", "Prototyping connections"],
-    ["Micro-USB cable", "Power and programming"],
+    ["ESP32 development board (DevKit)", "Reads sensors, talks to Firebase over Wi-Fi, drives the relay"],
+    ["DHT11 sensor module", "Digital temperature and humidity sensor (DATA on GPIO 4)"],
+    ["LDR light module (VCC, GND, OUT)", "Ambient light sensor; its analog OUT pin is read on GPIO 34"],
+    ["1-channel relay module (active LOW)", "Isolated switch between the ESP32 (GPIO 23) and the bulb"],
+    ["230 V bulb in a holder", "Output controlled from the dashboard or by the light logic"],
+    ["Fuse in the live wire", "Protects the mains side of the circuit"],
+    ["5 V USB supply", "Powers the ESP32; the relay VCC is fed from the VIN pin"],
+    ["Jumper wires", "Signal, ground and supply connections"],
+  ],
+};
+
+const t1Pins: Block = {
+  type: "table",
+  headers: ["Connection", "Connected to", "Purpose"],
+  rows: [
+    ["GPIO 2", "On-board LED (internal)", "Digital output — HIGH = ON, LOW = OFF"],
+    ["GND", "On-board LED return (internal)", "Ground reference"],
+    ["USB", "Laptop", "5 V power, uploading and Serial Monitor (115200 baud)"],
+    ["Wi-Fi radio (internal)", "Mobile hotspot", "Wireless link used for the HTTP requests — no pins"],
+  ],
+};
+
+const relayPins: Block = {
+  type: "table",
+  headers: ["Connection", "Connected to", "Purpose"],
+  rows: [
+    ["GPIO 23", "Relay IN", "Signal — active LOW: LOW energises the relay (bulb ON), HIGH = OFF"],
+    ["VIN (5 V)", "Relay VCC", "Supply for the relay coil"],
+    ["GND", "Relay GND", "Common ground"],
+    ["Relay COM", "230 V live (L) through the fuse", "Switched live input"],
+    ["Relay NO", "Bulb", "Bulb is connected when the relay is energised (NC is unused)"],
+    ["230 V neutral (N)", "Bulb", "Neutral goes straight to the bulb"],
   ],
 };
 
 const sensorPins: Block = {
   type: "table",
-  headers: ["ESP32 pin", "Connected to", "Purpose"],
+  headers: ["Connection", "Connected to", "Purpose"],
   rows: [
-    ["3V3", "DHT11 VCC, LDR (top leg)", "3.3 V supply for the sensors"],
     ["GPIO 4", "DHT11 DATA", "Digital input — temperature and humidity"],
-    ["GPIO 34", "Node between LDR and 10 kΩ resistor", "Analog input (ADC) — light level 0–4095"],
-    ["GPIO 23", "Relay IN", "Digital output — relay / bulb control"],
+    ["3V3", "DHT11 VCC and LDR module VCC", "3.3 V supply for the sensors"],
+    ["GPIO 34", "LDR module OUT", "Analog input (ADC) — light level 0–4095"],
+    ["GPIO 23", "Relay IN", "Digital output — active LOW relay / bulb control"],
     ["VIN (5 V)", "Relay VCC", "Supply for the relay coil"],
-    ["GND", "DHT11 GND, 10 kΩ resistor, relay GND", "Common ground"],
-  ],
-};
-
-const ledPins: Block = {
-  type: "table",
-  headers: ["ESP32 pin", "Connected to", "Purpose"],
-  rows: [
-    ["GPIO 2", "On-board LED", "Digital output — HIGH = ON, LOW = OFF"],
-    ["GND", "Common ground", "Return path"],
-    ["USB 5 V", "Laptop / USB supply", "Power, programming and Serial Monitor (115200 baud)"],
-    ["GPIO 2 (optional)", "Relay IN → bulb", "Same signal can drive a relay for the bulb demonstration"],
+    ["GND", "DHT11 GND, LDR GND, relay GND", "Common ground"],
+    ["Relay COM / NO", "230 V live through the fuse / bulb", "Switches the bulb; neutral goes directly to the bulb"],
   ],
 };
 
 const mainsSafety: Block = {
   type: "callout",
   title: "Safety",
-  text: "The relay switches a mains-powered bulb. Never connect mains directly to the ESP32, use an isolated relay module with insulated wiring and an enclosure, and only work on mains wiring when supervised and trained. A low-voltage load is safer for testing.",
+  text: "The relay switches a 230 V mains bulb. Never connect mains directly to the ESP32; keep the fuse in the live wire, use insulated wiring and an enclosure, and only work on mains wiring when supervised and trained. A low-voltage load is safer for testing.",
 };
 
 // ---------------------------------------------------------------------------
@@ -143,7 +171,7 @@ export const PROJECTS: ProjectDetail[] = [
     category: "HTTP · Local Web Server",
     shortIntro:
       "Turned the ESP32 into a small web server on the local Wi-Fi network so the on-board LED (GPIO 2) can be switched ON and OFF from a browser.",
-    coverImage: `${COVER}/Task 1/ESP32 Web Server LED Control Flow.png`,
+    coverImage: "/week-7/task-1/cover/cover.jpeg",
     repositoryUrl: `${REPO}/tree/Harinath07-Iot-Assignment-1`,
     activity: {
       summary:
@@ -156,7 +184,7 @@ export const PROJECTS: ProjectDetail[] = [
       ],
     },
     media: {
-      photos: photo("Photographs of the physical setup", "ESP32 connected over USB (and the relay/bulb if used)"),
+      photos: photo("Photographs of the physical setup", "ESP32 connected over USB with the control page open"),
       screenshots: photo("Screenshots of the web interface", "Browser page served by the ESP32 (address bar visible)"),
       video: video("Video: LED ON/OFF from the webpage", "Short screen + hardware recording of the buttons switching the LED"),
     },
@@ -195,7 +223,7 @@ export const PROJECTS: ProjectDetail[] = [
         │
         │  HTTP GET  /led/on  or  /led/off
         ▼
-Wi-Fi router (local network)
+Wi-Fi network (mobile hotspot)
         │
         ▼
 ESP32 Web Server  (port 80)
@@ -223,7 +251,7 @@ GPIO 2  ──►  LED`,
         id: "hardware",
         title: "Hardware & Software Used",
         blocks: [
-          ledHardware,
+          t1Hardware,
           {
             type: "table",
             headers: ["Software / library", "Use"],
@@ -241,10 +269,9 @@ GPIO 2  ──►  LED`,
         id: "circuit",
         title: "Circuit / Wiring Diagram & ESP32 Pin Connections",
         blocks: [
-          { type: "image", src: "/week-7/diagrams/task-1-circuit.svg", caption: "Task 1 circuit and pin connections (the relay/bulb branch is the optional demonstration load)." },
-          p("This task needs no external wiring: the LED is already on the ESP32 board and is connected to GPIO 2. The board is powered and programmed through the USB cable."),
-          ledPins,
-          mainsSafety,
+          { type: "image", src: "/week-7/task-1/circuit/task1-circuit-diagram.png", caption: "Task 1 hardware diagram: laptop and ESP32 on the same mobile hotspot; the LED is on the board." },
+          p("This task needs no external wiring: the LED is already on the ESP32 board and is connected to GPIO 2. The board is powered and programmed through the USB cable, and both the laptop and the ESP32 join the same mobile hotspot so the browser can reach the web server."),
+          t1Pins,
         ],
       },
       {
@@ -271,7 +298,7 @@ GPIO 2  ──►  LED`,
         title: "HTML Interface Developed for Controlling the LED",
         blocks: [
           { type: "code", file: "task1-web-interface.html", title: "task1-web-interface.html", lang: "html", caption: "The page that handleRoot() builds and sends to the browser." },
-          p("The page is a small HTML document with a dark theme and two large buttons. Each button is a normal link: \"TURN LED ON\" points to /led/on and \"TURN LED OFF\" points to /led/off, so no JavaScript is needed."),
+          p("The page is a small HTML document titled \"ESP32 Built-in LED\" with two large buttons. Each button sits inside a normal link: ON points to /led/on and OFF points to /led/off, so no JavaScript is needed."),
         ],
       },
       {
@@ -279,7 +306,7 @@ GPIO 2  ──►  LED`,
         title: "How the Webpage Sends a Command to the ESP32",
         blocks: [
           steps(
-            "The user taps TURN LED ON in the browser.",
+            "The user taps the ON button in the browser.",
             "The browser sends HTTP GET http://<ESP32-IP>/led/on over Wi-Fi to port 80.",
             "The ESP32 passes the request to server.handleClient() inside loop().",
             "The server matches the URL /led/on and calls handleLedOn().",
@@ -301,8 +328,7 @@ GPIO 2  ──►  LED`,
             headers: ["Problem", "Solution"],
             rows: [
               ["Did not know which address to open in the browser", "Printed WiFi.localIP() on the Serial Monitor after connecting and opened that IP in the browser."],
-              ["Serial Monitor showed unreadable characters", "Set the Serial Monitor baud rate to 115200 to match Serial.begin(115200)."],
-              ["Buttons in the page were not styled as intended", "The HTML string used the React attribute className; in plain HTML it must be class. Corrected the attribute."],
+              ["Serial Monitor showed unreadable characters", "The first line after a reset is printed by the boot loader at a different speed; the sketch itself prints at 115200 baud, so the Serial Monitor is set to 115200."],
               ["Browser stayed on the command URL after pressing a button", "Sent a 303 redirect with Location: / so the browser returns to the control page."],
               ["Page would not load from the phone", "ESP32 and phone must be on the same Wi-Fi network, and the SSID/password in the sketch must be correct."],
             ],
@@ -347,12 +373,12 @@ GPIO 2  ──►  LED`,
     title: "Task 2 — Adafruit IO Dashboard & MQTT",
     category: "MQTT · Cloud Dashboard",
     shortIntro:
-      "Extended the local web server into a cloud-connected design: the ESP32 talks MQTT to Adafruit IO, and an online dashboard switch controls the LED from anywhere.",
-    coverImage: `${COVER}/Task 2/Adafruit IO MQTT ESP32 Flow Diagram.png`,
+      "Extended the local web server into a cloud-connected design: the ESP32 talks MQTT to Adafruit IO, and an online dashboard switch controls a relay-driven bulb from anywhere.",
+    coverImage: "/week-7/task-2/cover/cover.jpg",
     repositoryUrl: `${REPO}/tree/Harinath07-Assesinment-2`,
     activity: {
       summary:
-        "Connected the ESP32 to Adafruit IO over MQTT so an online dashboard can switch the LED and receive its status back.",
+        "Connected the ESP32 to Adafruit IO over MQTT so an online dashboard can switch a bulb through a relay and receive its status back.",
       bullets: [
         "Created an Adafruit IO account, two feeds (led-control, led-status) and a dashboard.",
         "Subscribed the ESP32 to led-control and published confirmations to led-status.",
@@ -361,17 +387,17 @@ GPIO 2  ──►  LED`,
       ],
     },
     media: {
-      photos: photo("Photographs of the hardware setup", "ESP32 (and relay/bulb) while connected to Adafruit IO"),
+      photos: photo("Photographs of the hardware setup", "ESP32, relay and bulb while connected to Adafruit IO"),
       dashboard: photo("Screenshots of the Adafruit IO dashboard", "Dashboard with the toggle, feeds list, feed configuration"),
-      demo: photo("LED control through the cloud dashboard", "Pairs of images: dashboard toggled ON/OFF and the LED/bulb response"),
-      video: video("Working demonstration video", "Dashboard switch toggling the LED/bulb"),
+      demo: photo("LED control through the cloud dashboard", "Serial Monitor or photos showing the command arriving and the relay and bulb responding"),
+      video: video("Working demonstration video", "Dashboard switch toggling the bulb"),
     },
     sections: [
       {
         id: "overview",
         title: "Objective & Summary",
         blocks: [
-          p("Objective: connect the ESP32 to the Adafruit IO cloud platform using MQTT and control the LED from an online dashboard."),
+          p("Objective: connect the ESP32 to the Adafruit IO cloud platform using MQTT and control a bulb (through a relay) from an online dashboard."),
           p("In Task 1 the ESP32 could only be reached from the same Wi-Fi network. With a cloud broker in the middle, the device and the dashboard are both just MQTT clients of Adafruit IO, so the LED can be switched from any internet connection without port forwarding."),
         ],
       },
@@ -432,9 +458,12 @@ GPIO 2  ──►  LED`,
       },
       {
         id: "hardware",
-        title: "Hardware & Software Used",
+        title: "Hardware, Circuit Diagram & Software Used",
         blocks: [
-          ledHardware,
+          relayHardware,
+          { type: "image", src: "/week-7/task-2/circuit/task2-circuit-diagram.png", caption: "Task 2 circuit: ESP32 GPIO 23 drives an active-LOW relay that switches the 230 V bulb through a fuse." },
+          relayPins,
+          mainsSafety,
           {
             type: "table",
             headers: ["Software / service", "Use"],
@@ -471,7 +500,7 @@ GPIO 2  ──►  LED`,
             "Dashboards → New Dashboard → give it a name.",
             "Add a Toggle block connected to led-control, with button on value ON and off value OFF.",
             "Add a Text / Indicator block connected to led-status to display the confirmed state.",
-            "Run the sketch and toggle the switch to check that the LED follows it."
+            "Run the sketch and toggle the switch to check that the relay clicks and the bulb follows it."
           ),
         ],
       },
@@ -489,7 +518,7 @@ Adafruit IO MQTT broker  (io.adafruit.com:1883)
           │  2. broker forwards the message
           ▼
 ESP32  (subscribed to led-control)
-          │  3. reads payload → digitalWrite(GPIO 2)
+          │  3. reads payload → drives the relay on GPIO 23
           │  4. publishes "ON" / "OFF"
           ▼
 Adafruit IO feed: USERNAME/feeds/led-status
@@ -498,7 +527,6 @@ Adafruit IO feed: USERNAME/feeds/led-status
 Dashboard indicator updates`,
             caption: "Command path (top to bottom) and status path (feedback).",
           },
-          { type: "image", src: "/week-7/diagrams/task-2-circuit.svg", caption: "Hardware wiring for Task 2 (the network path is shown in the diagram above)." },
         ],
       },
       {
@@ -537,7 +565,7 @@ Dashboard indicator updates`,
               ["connectWiFi()", "Connects to Wi-Fi and prints the ESP32 IP address."],
               ["MQTT_connect()", "Connects to the broker and retries every 5 seconds until it succeeds."],
               ["mqtt.readSubscription(5000)", "Waits up to 5 seconds for a message on a subscribed feed."],
-              ["if (command == \"ON\" || \"on\" || \"1\")", "Turns GPIO 2 HIGH and publishes ON; the OFF branch does the opposite; anything else is reported as an unknown command."],
+              ["if (command == \"ON\" || \"on\" || \"1\")", "Drives the active-LOW relay (LOW = relay and bulb ON) and publishes ON; the OFF branch does the opposite; anything else is reported as an unknown command."],
             ],
           },
         ],
@@ -620,7 +648,7 @@ Dashboard indicator updates`,
     category: "IFTTT · Event-Driven Automation",
     shortIntro:
       "Added automation: an IFTTT applet (a Google Assistant voice command) sends ON/OFF to an Adafruit IO feed and the ESP32 acts on it over MQTT, with no manual dashboard click.",
-    coverImage: `${COVER}/Task 3/Neon IoT Automation System Flow.png`,
+    coverImage: "/week-7/task-3/cover/cover.png",
     repositoryUrl: `${REPO}/tree/Harinath07-Assignment-3`,
     activity: {
       summary:
@@ -669,7 +697,7 @@ Dashboard indicator updates`,
             type: "diagram",
             text: `IF THIS (trigger)                    THEN THAT (action)
 Google Assistant voice command  ──►  Send data to Adafruit IO
-"Okay Google, activate bulb on"       feed = automation-control
+"Okay Google, activate lights on"      feed = automation-control
                                       data = ON`,
             caption: "Every IFTTT applet is a trigger paired with an action.",
           },
@@ -684,9 +712,12 @@ Google Assistant voice command  ──►  Send data to Adafruit IO
       },
       {
         id: "hardware",
-        title: "Hardware & Software Used",
+        title: "Hardware, Circuit Diagram & Software Used",
         blocks: [
-          ledHardware,
+          relayHardware,
+          { type: "image", src: "/week-7/task-3/circuit/task3-circuit-diagram.png", caption: "Task 3 circuit: the same relay and bulb hardware as Task 2, triggered from IFTTT instead of a dashboard click." },
+          relayPins,
+          mainsSafety,
           {
             type: "table",
             headers: ["Software / service", "Use"],
@@ -707,10 +738,10 @@ Google Assistant voice command  ──►  Send data to Adafruit IO
         blocks: [
           steps(
             "Create the Adafruit IO feeds automation-control (commands) and automation-status (feedback).",
-            "In IFTTT, open Create and choose \"If This\" → Google Assistant → a voice trigger (for example \"Okay Google, activate bulb on\").",
+            "In IFTTT, open Create and choose \"If This\" → Google Assistant → Activate scene, and enter the scene name \"lights on\" (spoken as \"Okay Google, activate lights on\").",
             "Choose \"Then That\" → Adafruit IO → \"Send data to Adafruit IO\".",
             "Select the Adafruit account, the feed automation-control, and set Data to save to ON.",
-            "Create a second applet for \"bulb off\" that saves OFF to the same feed.",
+            "Create a second applet with the scene name \"lights off\" that saves OFF to the same feed.",
             "Check My Applets: both applets show as Connected."
           ),
         ],
@@ -719,14 +750,14 @@ Google Assistant voice command  ──►  Send data to Adafruit IO
         id: "trigger-used",
         title: "Trigger Used",
         blocks: [
-          { type: "callout", title: "Trigger", text: "Google Assistant voice command — \"Okay Google, activate bulb on\" and \"Okay Google, bulb off\". (IFTTT can use other triggers, such as a schedule, a button or a webhook, with exactly the same action.)" },
+          { type: "callout", title: "Trigger", text: "Google Assistant \"Activate scene\" trigger — the voice commands \"Okay Google, activate lights on\" and \"Okay Google, activate lights off\". (IFTTT can use other triggers, such as a schedule, a button or a webhook, with exactly the same action.)" },
         ],
       },
       {
         id: "action-performed",
         title: "Action Performed",
         blocks: [
-          { type: "callout", title: "Action", text: "IFTTT \"Send data to Adafruit IO\": the text ON or OFF is saved into the automation-control feed. The ESP32 then switches GPIO 2 and publishes ON/OFF to automation-status." },
+          { type: "callout", title: "Action", text: "IFTTT \"Send data to Adafruit IO\": the text ON or OFF is saved into the automation-control feed. The ESP32 then drives the relay on GPIO 23 and publishes ON/OFF to automation-status." },
         ],
       },
       {
@@ -739,7 +770,7 @@ Google Assistant voice command  ──►  Send data to Adafruit IO
             "IFTTT performs the action and saves ON or OFF to the Adafruit IO feed automation-control.",
             "Adafruit IO's MQTT broker publishes the new value to subscribers of that feed.",
             "The ESP32 (subscribed over MQTT) receives the payload and runs processCommand().",
-            "processCommand() sets GPIO 2 HIGH or LOW and the output changes.",
+            "processCommand() drives the active-LOW relay on GPIO 23 and the bulb switches.",
             "The ESP32 publishes the new state to automation-status, which can be seen in Adafruit IO."
           ),
         ],
@@ -762,10 +793,9 @@ Adafruit IO feed: automation-control
         ESP32  ── processCommand("ON" / "OFF")
           │                    │
           ▼                    ▼
-   GPIO 2 → LED / relay → bulb    publish → automation-status`,
+   GPIO 23 → relay → bulb         publish → automation-status`,
             caption: "Event → Cloud → MQTT → Device (and status back to the cloud).",
           },
-          { type: "image", src: "/week-7/diagrams/task-3-circuit.svg", caption: "Hardware wiring for Task 3 (same as Task 2)." },
         ],
       },
       {
@@ -839,7 +869,7 @@ Adafruit IO feed: automation-control
         id: "reflection",
         title: "Brief Reflection on the Assignment",
         blocks: [
-          p("This task showed how several services work together in a modern IoT system. I no longer controlled the LED manually: an event started a chain that ended in physical action, which gave me a clear picture of how smart-home automation is built."),
+          p("This task showed how several services work together in a modern IoT system. I no longer switched the bulb manually: an event started a chain that ended in physical action, which gave me a clear picture of how smart-home automation is built."),
         ],
       },
     ],
@@ -1099,7 +1129,7 @@ LDR ─────────┤
         id: "circuit",
         title: "Circuit / Wiring and Pin Connections",
         blocks: [
-          { type: "image", src: "/week-7/diagrams/task-4-circuit.svg", caption: "Task 4 circuit: DHT11 on GPIO 4, LDR divider on GPIO 34, relay on GPIO 23." },
+          { type: "image", src: "/week-7/task-4/circuit/task4-circuit-diagram.png", caption: "Task 4 circuit: DHT11 on GPIO 4, LDR module on GPIO 34, active-LOW relay on GPIO 23 switching the bulb through a fuse." },
           sensorPins,
         ],
       },
@@ -1195,7 +1225,7 @@ LDR ─────────┤
     category: "Firebase · Automation & Data Logging",
     shortIntro:
       "Completed the system: manual and automatic (LDR threshold) bulb control, periodic historical logging to Firebase, charts, a history table on the dashboard and CSV export.",
-    coverImage: `${COVER}/Task 5/Firebase IoT Monitoring Workflow.png`,
+    coverImage: "/week-7/task-5/cover/cover.png",
     repositoryUrl: `${REPO}/tree/Harinath07-Assignment-5`,
     activity: {
       summary:
@@ -1212,7 +1242,7 @@ LDR ─────────┤
       modes: photo("Manual / automatic mode (extra)", "Mode switch, threshold setting and the bulb responding"),
       firebase: photo("Screenshots of the Firebase log data", "Realtime Database /history records and control values"),
       dashboard: photo("Screenshots of the dashboard and data visualization", "Live cards, charts and history table"),
-      csv: photo("Downloaded CSV file demonstrated", "The exported file opened in Excel or Google Sheets"),
+      csv: csvFile("Downloaded CSV file demonstrated", "The .csv file exported with the Download CSV button"),
       photos: photo("Photographs of the complete prototype", "ESP32, DHT11, LDR, relay and bulb"),
       video: video("Video demonstrating the complete system", "Sensing, mode change, automatic switching, history and CSV export"),
     },
@@ -1264,7 +1294,7 @@ LDR ─────────┤
         id: "ldr-monitoring",
         title: "LDR-Based Light Level Monitoring Demonstrated",
         blocks: [
-          p("The LDR forms a voltage divider with a 10 kΩ resistor. analogRead(34) returns 0–4095: with this wiring a darker room gives a lower number, which is why the automatic mode turns the bulb on when the value falls below the threshold. The value is shown in the Serial Monitor, uploaded to Firebase and displayed on the dashboard (\"Ambient light\"). The monitoring evidence above covers both sensors."),
+          p("The LDR light module gives an analog voltage on its OUT pin, which the ESP32 reads with analogRead(34) as a number from 0 to 4095. The reading changes with the amount of light, and the automatic mode compares it with the threshold to decide whether the room is dark. The value is shown in the Serial Monitor, uploaded to Firebase and displayed on the dashboard (\"Ambient light\"). The monitoring evidence above covers both sensors."),
         ],
       },
       {
@@ -1278,7 +1308,7 @@ LDR ─────────┤
         id: "auto",
         title: "Automatic Bulb Control Using LDR Implemented",
         blocks: [
-          p("In AUTO mode the ESP32 decides by itself. automaticLightControl() compares the LDR value with the stored threshold: below the threshold means dark and the bulb is turned ON; otherwise it is turned OFF. The result is written back to /iot/control/bulb so the dashboard shows the real state."),
+          p("In AUTO mode the ESP32 decides by itself. automaticLightControl() compares the LDR value with the stored threshold: a reading past the threshold means the room is dark and the bulb is turned ON; otherwise it is turned OFF. The result is written back to /iot/control/bulb so the dashboard shows the real state."),
         ],
       },
       {
@@ -1291,7 +1321,7 @@ LDR ─────────┤
             rows: [
               ["Who decides", "The user, from the dashboard", "The ESP32, from the LDR reading"],
               ["Input used", "/iot/control/bulb", "LDR value and /iot/control/threshold"],
-              ["Bulb ON when", "Bulb switch is ON", "Light level < threshold (dark)"],
+              ["Bulb ON when", "Bulb switch is ON", "Light level passes the threshold (the room is dark)"],
               ["Switching modes", "Dashboard Manual / Automatic buttons write /iot/control/mode", "Same control"],
             ],
           },
@@ -1307,8 +1337,8 @@ LDR ─────────┤
             text: `loop() every 2 s
    read mode, threshold, bulb from Firebase
    if mode == "AUTO":
-        if lightLevel < threshold   →  DARK   →  bulb = ON
-        else                        →  LIGHT  →  bulb = OFF
+        if the room is dark (reading past the threshold)  →  bulb = ON
+        else                                              →  bulb = OFF
         relay = bulb ;  write bulb state back to /iot/control/bulb
    else (MANUAL):
         relay = bulb value set on the dashboard`,
@@ -1320,7 +1350,7 @@ LDR ─────────┤
         id: "threshold",
         title: "LDR Threshold / Calibration Method Documented",
         blocks: [
-          p("The threshold depends on the sensor, the 10 kΩ resistor and the room, so it is not a fixed number. The firmware starts with 1500 and the dashboard can change it (0–4095) without re-flashing."),
+          p("The threshold depends on the sensor module and the room, so it is not a fixed number. The dashboard has an LDR threshold box with a Save button, so the value (0–4095) can be changed without re-flashing."),
           steps(
             "Open the Serial Monitor or the dashboard and note the light value in a bright room.",
             "Cover the LDR or switch off the lights and note the value in the dark.",
@@ -1363,7 +1393,7 @@ LDR ─────────┤
 │   └── lightLevel
 ├── control
 │   ├── mode          "AUTO" | "MANUAL"
-│   ├── threshold     int  (default 1500)
+│   ├── threshold     int  (0 – 4095)
 │   └── bulb          bool
 └── history
     └── <push-id>            (one record per log)
@@ -1379,7 +1409,7 @@ LDR ─────────┤
             type: "table",
             headers: ["Field", "Type", "Meaning"],
             rows: [
-              ["timestamp", "string", "Time marker of the record (the device's millis() counter, see limitations)"],
+              ["timestamp", "number / string", "Date and time of the record — shown on the dashboard as day/month/year hh:mm:ss"],
               ["temperature", "float", "°C from the DHT11"],
               ["humidity", "float", "% relative humidity from the DHT11"],
               ["lightLevel", "int", "LDR ADC value 0–4095"],
@@ -1398,7 +1428,7 @@ LDR ─────────┤
             type: "table",
             headers: ["Recorded item", "Stored as", "Source in code"],
             rows: [
-              ["Timestamped sensor readings", "timestamp", "String(millis()) when the record is created"],
+              ["Timestamped sensor readings", "timestamp", "Time stamp written with every record when it is logged"],
               ["Temperature and humidity", "temperature, humidity", "dht.readTemperature() / readHumidity()"],
               ["LDR / light-level values", "lightLevel", "analogRead(LDR_PIN)"],
               ["Bulb status and operating mode", "bulbStatus, mode", "Current bulb state and mode variable"],
@@ -1425,7 +1455,7 @@ LDR ─────────┤
         id: "csv",
         title: "CSV Data Download Implemented",
         blocks: [
-          p("The Download CSV button builds a CSV text from the history records the dashboard has loaded, wraps it in a Blob and starts a browser download named home-monitoring-history.csv. Columns: Timestamp, Temperature, Humidity, LDR, Bulb State, Operating Mode. No server is involved; it all happens in the browser."),
+          p("The Download CSV button builds a CSV text from the history records the dashboard has loaded, wraps it in a Blob and starts a browser download named Smart_IoT_Historical_Data_<date>.csv. Columns: Timestamp, Temperature, Humidity, LDR, Bulb State, Operating Mode. No server is involved; it all happens in the browser."),
           { type: "code", file: "dashboard-app.js", title: "public/app.js (see the CSV section)", lang: "javascript" },
         ],
       },
@@ -1442,7 +1472,7 @@ LDR ─────────┤
         id: "circuit",
         title: "Circuit / Wiring and Pin Connections",
         blocks: [
-          { type: "image", src: "/week-7/diagrams/task-5-circuit.svg", caption: "Task 5 uses the same hardware as Task 4." },
+          { type: "image", src: "/week-7/task-5/circuit/task5-circuit-diagram.png", caption: "Task 5 circuit: the same ESP32, DHT11, LDR module and relay hardware as Task 4, now used for logging and automation." },
           sensorPins,
           sensorHardware,
           mainsSafety,
@@ -1471,7 +1501,7 @@ LDR ─────────┤
         title: "Limitations of the Current Prototype",
         blocks: [
           list(
-            "The history timestamp is the board's millis() counter (time since power-up), not real clock time; there is no NTP or real-time clock yet.",
+            "History is written on a fixed 30-second schedule, so short events between two records are not captured.",
             "DHT11 accuracy is limited (roughly ±2 °C and ±5 % RH) and it updates slowly.",
             "The LDR reading is uncalibrated and non-linear, so the threshold must be tuned by hand for each room.",
             "The ESP32 polls Firebase every 2 seconds instead of using a streaming listener.",
@@ -1488,7 +1518,7 @@ LDR ─────────┤
         title: "Possible Future Improvements",
         blocks: [
           list(
-            "Add NTP time synchronisation (or an RTC) so each record has a real date and time.",
+            "Add alerts when temperature, humidity or light leaves a chosen range.",
             "Use a more accurate sensor (DHT22, BME280) and a calibrated light sensor.",
             "Use Firebase streaming (listeners) instead of polling.",
             "Automatically delete or aggregate old history records.",

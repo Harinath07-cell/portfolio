@@ -18,20 +18,23 @@ interface PageProps {
 
 const IMAGE_EXT = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg"]);
 const VIDEO_EXT = new Set([".mp4", ".webm", ".mov", ".m4v"]);
+const CSV_EXT = new Set([".csv"]);
 
 function captionFromName(name: string): string {
-  return name
+  const text = name
     .replace(/\.[^.]+$/, "")
+    .replace(/^\d+[\s._-]+/, "") // leading "1 ", "2_" ... only controls the order
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 /** Lists the evidence files dropped into public/week-7/<slug>/<slot>/ (sorted by name). */
-function scanSlot(slug: string, slot: string, kind: "image" | "video"): MediaFile[] {
+function scanSlot(slug: string, slot: string, kind: "image" | "video" | "csv"): MediaFile[] {
   const dir = path.join(process.cwd(), "public", "week-7", slug, slot);
   if (!fs.existsSync(dir)) return [];
-  const allowed = kind === "video" ? VIDEO_EXT : IMAGE_EXT;
+  const allowed = kind === "video" ? VIDEO_EXT : kind === "csv" ? CSV_EXT : IMAGE_EXT;
   return fs
     .readdirSync(dir)
     .filter((name) => allowed.has(path.extname(name).toLowerCase()))
@@ -39,6 +42,8 @@ function scanSlot(slug: string, slot: string, kind: "image" | "video"): MediaFil
     .map((name) => ({
       url: `/week-7/${slug}/${slot}/${encodeURIComponent(name)}`,
       caption: captionFromName(name),
+      // CSV files are previewed as a table, so their text is passed to the page.
+      ...(kind === "csv" ? { text: fs.readFileSync(path.join(dir, name), "utf-8") } : {}),
     }));
 }
 

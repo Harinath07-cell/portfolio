@@ -6,10 +6,9 @@ import {
   ArrowLeft,
   Check,
   CheckCircle2,
-  Circle,
   Copy,
+  Download,
   ExternalLink,
-  FolderOpen,
   Github,
   Info,
   ShieldAlert,
@@ -20,6 +19,8 @@ import type { Block, ProjectDetail } from "../projects-data";
 export interface MediaFile {
   url: string;
   caption: string;
+  /** raw text, only for CSV slots */
+  text?: string;
 }
 
 interface TaskDetailClientProps {
@@ -88,6 +89,84 @@ function CodeBlock({
   );
 }
 
+function parseCsv(text: string): string[][] {
+  return text
+    .split(/\r?\n/)
+    .filter((line) => line.trim().length > 0)
+    .map((line) => {
+      const cells: string[] = [];
+      let cell = "";
+      let quoted = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (quoted && line[i + 1] === '"') {
+            cell += '"';
+            i++;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (ch === "," && !quoted) {
+          cells.push(cell);
+          cell = "";
+        } else {
+          cell += ch;
+        }
+      }
+      cells.push(cell);
+      return cells;
+    });
+}
+
+function CsvPreview({ file }: { file: MediaFile }) {
+  const rows = parseCsv(file.text ?? "");
+  const [header, ...body] = rows;
+  const fileName = decodeURIComponent(file.url.split("/").pop() ?? "data.csv");
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="font-mono text-xs text-ink-faint">
+          {fileName} — {body.length} recorded readings
+        </p>
+        <a
+          href={file.url}
+          download
+          className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-4 py-1.5 font-mono text-xs font-medium text-cyan transition-all hover:bg-cyan hover:text-canvas"
+        >
+          <Download size={13} /> Download the CSV file
+        </a>
+      </div>
+      {header && (
+        <div className="max-h-[480px] overflow-auto rounded-xl border border-hairline">
+          <table className="w-full text-left text-xs sm:text-sm">
+            <thead className="sticky top-0 border-b border-hairline bg-surface-2 font-mono text-xs uppercase tracking-wider text-cyan">
+              <tr>
+                {header.map((h) => (
+                  <th key={h} className="whitespace-nowrap px-4 py-3">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-hairline text-ink-muted">
+              {body.map((row, r) => (
+                <tr key={r} className="transition-colors hover:bg-white/5">
+                  {row.map((cell, c) => (
+                    <td key={c} className={`whitespace-nowrap px-4 py-2.5 ${c === 0 ? "font-mono text-ink" : ""}`}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MediaBlock({
   slot,
   project,
@@ -101,15 +180,15 @@ function MediaBlock({
   const files = mediaFiles[slot] ?? [];
   if (!def) return null;
 
-  if (files.length === 0) {
+  // Slots without uploaded files are hidden (see visibleSections below).
+  if (files.length === 0) return null;
+
+  if (def.kind === "csv") {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-hairline bg-white/5 p-6 text-center">
-        <FolderOpen size={26} className="text-indigo-soft" />
-        <p className="font-mono text-xs text-ink-muted">Evidence to be added — {def.label}</p>
-        <p className="max-w-xl text-xs text-ink-faint">{def.hint}</p>
-        <p className="font-mono text-[11px] text-ink-faint">
-          public/week-7/{project.slug}/{slot}/
-        </p>
+      <div className="space-y-6">
+        {files.map((file) => (
+          <CsvPreview key={file.url} file={file} />
+        ))}
       </div>
     );
   }
@@ -319,12 +398,16 @@ function RenderBlock({
 export default function TaskDetailClient({ project, codeFiles, mediaFiles }: TaskDetailClientProps) {
   const [showChecklist, setShowChecklist] = useState(true);
 
-  const items = project.checklist.map((item) => {
-    const done = item.slot ? (mediaFiles[item.slot]?.length ?? 0) > 0 : true;
-    return { ...item, done };
-  });
-  const doneCount = items.filter((i) => i.done).length;
-  const percent = Math.round((doneCount / items.length) * 100);
+  const hasFiles = (slot: string) => (mediaFiles[slot]?.length ?? 0) > 0;
+
+  // Evidence sections with no uploaded files (and their checklist items) are not shown.
+  const visibleSections = project.sections
+    .map((section) => ({
+      ...section,
+      blocks: section.blocks.filter((block) => block.type !== "media" || hasFiles(block.slot)),
+    }))
+    .filter((section) => section.blocks.length > 0);
+  const items = project.checklist.filter((item) => !item.slot || hasFiles(item.slot));
 
   return (
     <div className="min-h-screen bg-canvas text-ink selection:bg-indigo/30 selection:text-ink">
@@ -382,13 +465,11 @@ export default function TaskDetailClient({ project, codeFiles, mediaFiles }: Tas
               <div>
                 <h2 className="font-display text-xl font-semibold text-ink">Assignment Checklist</h2>
                 <p className="mt-1 text-xs text-ink-muted">
-                  Each requirement links to where it is covered. Evidence items turn green when files are added.
+                  Each requirement links to the section that covers it.
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-mono text-xs text-ink-muted">
-                  {doneCount} / {items.length} ({percent}%)
-                </span>
+                <span className="font-mono text-xs text-ink-muted">{items.length} requirements covered</span>
                 <button
                   onClick={() => setShowChecklist((v) => !v)}
                   className="rounded-full border border-hairline px-3 py-1 font-mono text-xs text-ink-muted transition-colors hover:text-ink"
@@ -396,9 +477,6 @@ export default function TaskDetailClient({ project, codeFiles, mediaFiles }: Tas
                   {showChecklist ? "Hide" : "Show"}
                 </button>
               </div>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
-              <div className="h-full rounded-full bg-gradient-to-r from-indigo to-cyan" style={{ width: `${percent}%` }} />
             </div>
             {showChecklist && (
               <ul className="grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
@@ -408,12 +486,8 @@ export default function TaskDetailClient({ project, codeFiles, mediaFiles }: Tas
                       href={`#${item.section}`}
                       className="flex items-start gap-2 rounded-lg px-2 py-1.5 text-sm text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
                     >
-                      {item.done ? (
-                        <CheckCircle2 size={15} className="mt-0.5 flex-none text-cyan" />
-                      ) : (
-                        <Circle size={15} className="mt-0.5 flex-none text-ink-faint" />
-                      )}
-                      <span className={item.done ? "" : "text-ink-faint"}>{item.label}</span>
+                      <CheckCircle2 size={15} className="mt-0.5 flex-none text-cyan" />
+                      <span>{item.label}</span>
                     </a>
                   </li>
                 ))}
@@ -422,7 +496,7 @@ export default function TaskDetailClient({ project, codeFiles, mediaFiles }: Tas
           </section>
 
           {/* Sections */}
-          {project.sections.map((section, index) => (
+          {visibleSections.map((section, index) => (
             <section
               key={section.id}
               id={section.id}

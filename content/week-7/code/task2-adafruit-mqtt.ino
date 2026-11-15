@@ -21,9 +21,10 @@
 
 // =====================================================
 // ESP32 Hardware
+// Relay module (active LOW) on GPIO 23 switches the bulb
 // =====================================================
 
-#define LED_PIN 2
+#define RELAY_PIN 23
 
 // =====================================================
 // Wi-Fi Client
@@ -54,7 +55,7 @@ Adafruit_MQTT_Subscribe ledFeed =
     AIO_USERNAME "/feeds/led-control"
   );
 
-// Feed for publishing current LED status
+// Feed for publishing the current bulb status
 Adafruit_MQTT_Publish ledStatus =
   Adafruit_MQTT_Publish(
     &mqtt,
@@ -121,11 +122,11 @@ void setup() {
 
   Serial.begin(115200);
 
-  // Configure built-in LED
-  pinMode(LED_PIN, OUTPUT);
+  // Configure relay pin
+  pinMode(RELAY_PIN, OUTPUT);
 
-  // Start with LED OFF
-  digitalWrite(LED_PIN, LOW);
+  // Start with the bulb OFF (active LOW relay: HIGH = OFF)
+  digitalWrite(RELAY_PIN, HIGH);
 
   // Connect to Wi-Fi
   connectWiFi();
@@ -153,7 +154,7 @@ void loop() {
 
   while ((subscription = mqtt.readSubscription(5000))) {
 
-    // Check if message came from LED feed
+    // Check if the message came from the control feed
     if (subscription == &ledFeed) {
 
       String command = (char *)ledFeed.lastread;
@@ -162,40 +163,43 @@ void loop() {
       Serial.println(command);
 
       // ==========================================
-      // LED ON
+      // BULB ON
       // ==========================================
 
       if (command == "ON" || command == "on" || command == "1") {
 
-        digitalWrite(LED_PIN, HIGH);
+        // Active LOW relay: LOW energises the relay
+        digitalWrite(RELAY_PIN, LOW);
 
-        Serial.println("Built-in LED: ON");
+        Serial.println("Relay: ON");
+        Serial.println("Bulb: ON");
 
         // Publish status
         if (!ledStatus.publish("ON")) {
-          Serial.println("Failed to publish LED status");
+          Serial.println("Failed to publish bulb status");
         }
         else {
-          Serial.println("LED status published: ON");
+          Serial.println("Bulb status published: ON");
         }
       }
 
       // ==========================================
-      // LED OFF
+      // BULB OFF
       // ==========================================
 
       else if (command == "OFF" || command == "off" || command == "0") {
 
-        digitalWrite(LED_PIN, LOW);
+        digitalWrite(RELAY_PIN, HIGH);
 
-        Serial.println("Built-in LED: OFF");
+        Serial.println("Relay: OFF");
+        Serial.println("Bulb: OFF");
 
         // Publish status
         if (!ledStatus.publish("OFF")) {
-          Serial.println("Failed to publish LED status");
+          Serial.println("Failed to publish bulb status");
         }
         else {
-          Serial.println("LED status published: OFF");
+          Serial.println("Bulb status published: OFF");
         }
       }
 
