@@ -20,79 +20,15 @@ import {
 } from "lucide-react";
 import { PROJECTS } from "./projects-data";
 
-// 5 Activities for Week 7
-const ACTIVITIES = [
-  {
-    id: "act-1",
-    num: "01",
-    title: "ESP32 Web Server & Built-in LED Control (HTTP)",
-    category: "HTTP Protocol",
-    summary:
-      "Programmed the ESP32 using Arduino IDE to host an HTTP web server on port 80 and created web endpoints to toggle the built-in LED (GPIO 2).",
-    details: [
-      "Configured ESP32 Wi-Fi station mode to connect to local wireless router.",
-      "Implemented WebServer.h library to listen on HTTP port 80.",
-      "Constructed embedded HTML UI served directly from ESP32 memory.",
-      "Handled GET requests for `/led/on` and `/led/off` routes to control GPIO 2."
-    ]
-  },
-  {
-    id: "act-2",
-    num: "02",
-    title: "Adafruit IO Cloud Dashboard & MQTT Built-in LED Control",
-    category: "Adafruit IO & MQTT",
-    summary:
-      "Connected ESP32 to Adafruit IO using MQTT publish/subscribe protocol to remotely control the onboard LED via a cloud dashboard with bidirectional status feedback.",
-    details: [
-      "Configured Adafruit IO MQTT broker credentials, feeds (led-control, led-status), and dashboard widgets.",
-      "Implemented Adafruit MQTT Library in Arduino IDE to establish persistent socket over port 1883.",
-      "Handled remote 'ON' and 'OFF' MQTT subscription payloads to toggle GPIO 2 built-in LED.",
-      "Published state confirmations back to Adafruit IO to synchronize cloud dashboard indicators in real time."
-    ]
-  },
-  {
-    id: "act-3",
-    num: "03",
-    title: "IFTTT + Adafruit IO Cloud IoT Automation",
-    category: "Cloud Automation",
-    summary:
-      "Automated ESP32 built-in LED switching by linking external condition triggers in IFTTT with Adafruit IO feeds and MQTT messaging.",
-    details: [
-      "Configured Adafruit IO MQTT feeds ('automation-trigger' and 'device-status') for automated cloud routing.",
-      "Built IFTTT Applet connecting event triggers with Adafruit IO service actions.",
-      "Implemented ESP32 firmware subscribing to trigger feed and controlling GPIO 2 LED.",
-      "Published execution confirmation back to Adafruit IO to maintain synchronized cloud telemetry."
-    ]
-  },
-  {
-    id: "act-4",
-    num: "04",
-    title: "Firebase IoT Realtime Monitoring Dashboard & Bulb Control",
-    category: "Cloud Database (BaaS)",
-    summary:
-      "Integrated ESP32 with Firebase Realtime Database and Authentication to log DHT11/LDR sensor readings and toggle remote bulb loads via a responsive web dashboard.",
-    details: [
-      "Configured Firebase project with Authentication and Realtime Database NoSQL schema.",
-      "Interfaced DHT11 sensor (GPIO 4) and LDR analog voltage divider (GPIO 34) on ESP32.",
-      "Uploaded periodic temperature, humidity, and ambient light telemetry to Firebase RTDB.",
-      "Synchronized bidirectional bulb actuation commands between web dashboard and ESP32 GPIO."
-    ]
-  },
-  {
-    id: "act-5",
-    num: "05",
-    title: "Firebase Logging, Automation & CSV Data Export",
-    category: "Cloud Analytics & Automation",
-    summary:
-      "Engineered an automated environmental lighting and logging system using ESP32, Firebase RTDB, and NTP time sync with manual/auto modes and client-side CSV data export.",
-    details: [
-      "Synchronized ESP32 RTC with pool.ntp.org time servers to generate ISO timestamps.",
-      "Implemented dual-mode logic: manual dashboard control vs. automated LDR light-threshold switching.",
-      "Logged periodic multi-sensor snapshot records to '/iot/history' in Firebase Realtime Database.",
-      "Built client-side data export parsing cloud JSON snapshots into downloadable spreadsheet CSV files."
-    ]
-  }
-];
+// Activities are derived from the task data so the dashboard and the task pages never disagree.
+const ACTIVITIES = PROJECTS.map((project) => ({
+  id: `act-${project.num}`,
+  num: project.num,
+  title: project.title.replace(/^Task \d+ — /, ""),
+  category: project.category,
+  summary: project.activity.summary,
+  details: project.activity.bullets,
+}));
 
 // Component Specs Table Data
 const COMPONENTS_TABLE = [
@@ -366,7 +302,7 @@ export default function Week7DashboardPage() {
                   <Box size={22} className="text-cyan" /> Featured Projects
                 </h2>
                 <p className="text-xs text-ink-muted mt-1">
-                  Click any project card below to open its dedicated project page with full 11-section documentation, source code, pin diagram & evidence.
+                  Click any project card below to open its dedicated task page: concepts, circuit diagram, source code, evidence and a checklist of everything the assignment requires.
                 </p>
               </div>
               <span className="font-mono text-xs text-ink-faint">Section 03</span>
@@ -384,7 +320,7 @@ export default function Week7DashboardPage() {
                     {/* Card Image */}
                     <div className="overflow-hidden rounded-xl border border-hairline bg-canvas/40 aspect-video">
                       <img
-                        src={encodeURI(project.coverImage || project.evidence.image)}
+                        src={encodeURI(project.coverImage)}
                         alt={project.title}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
